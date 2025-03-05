@@ -1,0 +1,18 @@
+﻿using e_learning.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace e_learning.infrastructure.Context
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+
+        }
+
+        public DbSet<Video> videos { get; set; }
+        public DbSet<Course> courses { get; set; }
+        public DbSet<Instructor> instructors { get; set; }
+
+    }
+}

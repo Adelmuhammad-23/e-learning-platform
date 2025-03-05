@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>e_learning.Services</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\e-learning.Data\e-learning.Data.csproj" />
+    <ProjectReference Include="..\e-learning.infrastructure\e-learning.infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
