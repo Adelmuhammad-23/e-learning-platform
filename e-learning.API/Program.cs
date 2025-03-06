@@ -1,5 +1,7 @@
 using e_learning.Core;
+using e_learning.infrastructure;
 using e_learning.infrastructure.Context;
+using e_learning.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,10 +16,17 @@ option.UseSqlServer(connectionString)
 );
 #endregion
 
+
+
 #region DependencyInjection
 
-builder.Services.AddCoreDependencis();
+builder.Services.AddCoreDependencis()
+                .AddServicesDependencis()
+                .AddInfrastructureDependencis();
 #endregion
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

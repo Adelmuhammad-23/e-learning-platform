@@ -24,9 +24,6 @@
     <Folder Include="Features\Courses\Commands\Models\" />
     <Folder Include="Features\Courses\Commands\" />
     <Folder Include="Features\Courses\Commands\Validatiors\" />
-    <Folder Include="Features\Courses\Queries\Handlers\" />
-    <Folder Include="Features\Courses\Queries\Models\" />
-    <Folder Include="Features\Courses\Queries\Responses\" />
     <Folder Include="Features\Instructors\Commands\Handlers\" />
     <Folder Include="Features\Instructors\Commands\Models\" />
     <Folder Include="Features\Instructors\Commands\Validatiors\" />
@@ -39,9 +36,11 @@
     <Folder Include="Features\Videos\Queries\Handlers\" />
     <Folder Include="Features\Videos\Queries\Models\" />
     <Folder Include="Features\Videos\Queries\Responses\" />
+    <Folder Include="Mapping\CoursesMapping\CommandMapping\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="MediatR" Version="12.4.1" />

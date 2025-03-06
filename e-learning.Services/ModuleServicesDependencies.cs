@@ -1,0 +1,18 @@
+﻿using e_learning.Services.Abstructs;
+using e_learning.Services.Implementations;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace e_learning.Services
+{
+    public static class ModuleServicesDependencies
+    {
+
+        public static IServiceCollection AddServicesDependencis(this IServiceCollection services)
+        {
+            services.AddTransient<ICourseServices, CourseServices>();
+
+            return services;
+
+        }
+    }
+}
