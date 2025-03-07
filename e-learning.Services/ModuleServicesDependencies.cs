@@ -10,6 +10,7 @@ namespace e_learning.Services
         public static IServiceCollection AddServicesDependencis(this IServiceCollection services)
         {
             services.AddTransient<ICourseServices, CourseServices>();
+            services.AddTransient<ICategoryServices, CategoryServices>();
 
             return services;
 

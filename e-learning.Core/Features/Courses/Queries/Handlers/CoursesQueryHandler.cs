@@ -29,6 +29,9 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
         public async Task<Responses<List<AllCoursesResponse>>> Handle(GetAllCoursesQuery request, CancellationToken cancellationToken)
         {
             var courses = await _courseServices.GetAllCoursesAsync();
+            if (courses == null)
+                return NotFound<List<AllCoursesResponse>>("Not found courses");
+
 
             var coursesMapping = _mapper.Map<List<AllCoursesResponse>>(courses);
 
@@ -42,6 +45,8 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
         public async Task<Responses<List<AllCoursesByCategoryIdResponse>>> Handle(GetAllCoursesByCategoryIdQuery request, CancellationToken cancellationToken)
         {
             var courses = await _courseServices.GetCoursesByCategoryIdAsync(request.Id);
+            if (courses == null)
+                return NotFound<List<AllCoursesByCategoryIdResponse>>($"Not found courses this categoryId : {request.Id}");
 
             var coursesMapping = _mapper.Map<List<AllCoursesByCategoryIdResponse>>(courses);
 
@@ -54,10 +59,15 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
         public async Task<Responses<List<GetTopPricedCoursesResponse>>> Handle(GetTopPricedCoursesQuery request, CancellationToken cancellationToken)
         {
             var courses = await _courseServices.GetTopPricedCourses();
+            if (courses == null)
+                return NotFound<List<GetTopPricedCoursesResponse>>("Not found courses");
+
 
             var TopPricedCoursesMapping = _mapper.Map<List<GetTopPricedCoursesResponse>>(courses);
 
+
             var result = Success(TopPricedCoursesMapping);
+
             result.Data = TopPricedCoursesMapping;
             return result;
         }

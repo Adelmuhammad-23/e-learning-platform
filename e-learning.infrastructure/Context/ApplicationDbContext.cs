@@ -14,6 +14,7 @@ namespace e_learning.infrastructure.Context
         public DbSet<Video> videos { get; set; }
         public DbSet<Course> courses { get; set; }
         public DbSet<Instructor> instructors { get; set; }
+        public DbSet<Category> Category { get; set; }
         public DbSet<TopPricedCourses> TopPricedCourses { get; set; }
 
     }

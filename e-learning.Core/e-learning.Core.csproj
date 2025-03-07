@@ -17,9 +17,6 @@
     <Folder Include="Features\Categories\Commands\Handlers\" />
     <Folder Include="Features\Categories\Commands\Models\" />
     <Folder Include="Features\Categories\Commands\Validatiors\" />
-    <Folder Include="Features\Categories\Queries\Handlers\" />
-    <Folder Include="Features\Categories\Queries\Models\" />
-    <Folder Include="Features\Categories\Queries\Responses\" />
     <Folder Include="Features\Courses\Commands\Handlers\" />
     <Folder Include="Features\Courses\Commands\Models\" />
     <Folder Include="Features\Courses\Commands\" />
@@ -36,6 +33,7 @@
     <Folder Include="Features\Videos\Queries\Handlers\" />
     <Folder Include="Features\Videos\Queries\Models\" />
     <Folder Include="Features\Videos\Queries\Responses\" />
+    <Folder Include="Mapping\CategoryMapping\CommandMapping\" />
     <Folder Include="Mapping\CoursesMapping\CommandMapping\" />
   </ItemGroup>
 

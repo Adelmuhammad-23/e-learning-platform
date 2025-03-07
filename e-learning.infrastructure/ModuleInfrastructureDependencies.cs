@@ -12,6 +12,7 @@ namespace e_learning.infrastructure
         public static IServiceCollection AddInfrastructureDependencis(this IServiceCollection services)
         {
             services.AddTransient<ICourseRepository, CourseRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ITopPricedCoursesView<TopPricedCourses>, TopPricedCoursesView>();
 
             return services;
