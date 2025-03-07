@@ -1,4 +1,5 @@
 ﻿using e_learning.Data.Entities;
+using e_learning.Data.Entities.Views;
 using Microsoft.EntityFrameworkCore;
 
 namespace e_learning.infrastructure.Context
@@ -13,6 +14,7 @@ namespace e_learning.infrastructure.Context
         public DbSet<Video> videos { get; set; }
         public DbSet<Course> courses { get; set; }
         public DbSet<Instructor> instructors { get; set; }
+        public DbSet<TopPricedCourses> TopPricedCourses { get; set; }
 
     }
 }

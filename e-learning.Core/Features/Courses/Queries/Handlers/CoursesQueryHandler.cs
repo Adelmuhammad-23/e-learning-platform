@@ -9,7 +9,8 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
 {
     public class CoursesQueryHandler : ResponsesHandler,
         IRequestHandler<GetAllCoursesQuery, Responses<List<AllCoursesResponse>>>,
-        IRequestHandler<GetAllCoursesByCategoryIdQuery, Responses<List<AllCoursesByCategoryIdResponse>>>
+        IRequestHandler<GetAllCoursesByCategoryIdQuery, Responses<List<AllCoursesByCategoryIdResponse>>>,
+        IRequestHandler<GetTopPricedCoursesQuery, Responses<List<GetTopPricedCoursesResponse>>>
     {
         #region Fields
         private readonly ICourseServices _courseServices;
@@ -47,6 +48,17 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
             var result = Success(coursesMapping);
             result.Data = coursesMapping;
             result.Meta = new { TotalCourseCount = courses.Count };
+            return result;
+        }
+
+        public async Task<Responses<List<GetTopPricedCoursesResponse>>> Handle(GetTopPricedCoursesQuery request, CancellationToken cancellationToken)
+        {
+            var courses = await _courseServices.GetTopPricedCourses();
+
+            var TopPricedCoursesMapping = _mapper.Map<List<GetTopPricedCoursesResponse>>(courses);
+
+            var result = Success(TopPricedCoursesMapping);
+            result.Data = TopPricedCoursesMapping;
             return result;
         }
         #endregion

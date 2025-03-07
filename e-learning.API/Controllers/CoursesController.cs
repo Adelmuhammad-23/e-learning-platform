@@ -12,6 +12,11 @@ namespace e_learning.API.Controllers
         {
             return NewResult(await Mediator.Send(new GetAllCoursesQuery()));
         }
+        [HttpGet("TopPricedCourses")]
+        public async Task<IActionResult> GetTopPricedCourses()
+        {
+            return NewResult(await Mediator.Send(new GetTopPricedCoursesQuery()));
+        }
         [HttpGet("{categoryId}")]
         public async Task<IActionResult> GetCoursesByCategoryId([FromRoute] int categoryId)
         {
