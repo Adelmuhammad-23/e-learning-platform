@@ -1,7 +1,9 @@
 using e_learning.Core;
+using e_learning.Data.Entities.Identity;
 using e_learning.infrastructure;
 using e_learning.infrastructure.Context;
 using e_learning.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,27 @@ option.UseSqlServer(connectionString)
 builder.Services.AddCoreDependencis()
                 .AddServicesDependencis()
                 .AddInfrastructureDependencis();
+builder.Services.AddIdentity<User, Role>(option =>
+{
+    // Password settings.
+    option.Password.RequireDigit = true;
+    option.Password.RequireLowercase = true;
+    option.Password.RequireNonAlphanumeric = true;
+    option.Password.RequireUppercase = true;
+    option.Password.RequiredLength = 6;
+    option.Password.RequiredUniqueChars = 1;
+
+    // Lockout settings.
+    option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    option.Lockout.MaxFailedAccessAttempts = 5;
+    option.Lockout.AllowedForNewUsers = true;
+
+    // User settings.
+    option.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    option.User.RequireUniqueEmail = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
 #endregion
 
 
@@ -34,11 +57,10 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 

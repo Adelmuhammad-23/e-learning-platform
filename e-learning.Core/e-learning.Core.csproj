@@ -8,12 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Mapping\AuthMapping\**" />
+    <EmbeddedResource Remove="Mapping\AuthMapping\**" />
+    <None Remove="Mapping\AuthMapping\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\e-learning.Data\e-learning.Data.csproj" />
     <ProjectReference Include="..\e-learning.infrastructure\e-learning.infrastructure.csproj" />
     <ProjectReference Include="..\e-learning.Services\e-learning.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Authentication\Commands\Validatiors\" />
     <Folder Include="Features\Categories\Commands\Handlers\" />
     <Folder Include="Features\Categories\Commands\Models\" />
     <Folder Include="Features\Categories\Commands\Validatiors\" />
