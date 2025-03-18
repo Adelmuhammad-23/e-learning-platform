@@ -9,9 +9,6 @@ namespace e_learning.API.Controllers
     public class CategoriesController : AppControllerBase
     {
         [HttpGet()]
-        public async Task<IActionResult> GetAllCategory()
-        {
-            return NewResult(await Mediator.Send(new GetAllCategoryQuery()));
-        }
+        public async Task<IActionResult> GetAllCategory() => NewResult(await Mediator.Send(new GetAllCategoryQuery()));
     }
 }

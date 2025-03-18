@@ -8,19 +8,12 @@ namespace e_learning.API.Controllers
     public class CoursesController : AppControllerBase
     {
         [HttpGet()]
-        public async Task<IActionResult> GetCourses()
-        {
-            return NewResult(await Mediator.Send(new GetAllCoursesQuery()));
-        }
+        public async Task<IActionResult> GetCourses() => NewResult(await Mediator.Send(new GetAllCoursesQuery()));
         [HttpGet("TopPricedCourses")]
-        public async Task<IActionResult> GetTopPricedCourses()
-        {
-            return NewResult(await Mediator.Send(new GetTopPricedCoursesQuery()));
-        }
+        public async Task<IActionResult> GetTopPricedCourses() => NewResult(await Mediator.Send(new GetTopPricedCoursesQuery()));
+
         [HttpGet("{categoryId}")]
-        public async Task<IActionResult> GetCoursesByCategoryId([FromRoute] int categoryId)
-        {
-            return NewResult(await Mediator.Send(new GetAllCoursesByCategoryIdQuery(categoryId)));
-        }
+        public async Task<IActionResult> GetCoursesByCategoryId([FromRoute] int categoryId) => NewResult(await Mediator.Send(new GetAllCoursesByCategoryIdQuery(categoryId)));
+
     }
 }
