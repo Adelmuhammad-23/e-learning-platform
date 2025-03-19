@@ -23,6 +23,8 @@ namespace e_learning.infrastructure.Context
         public DbSet<Instructor> instructors { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<TopPricedCourses> TopPricedCourses { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
+
 
     }
 }

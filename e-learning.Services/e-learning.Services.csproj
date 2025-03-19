@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\e-learning.Data\e-learning.Data.csproj" />
     <ProjectReference Include="..\e-learning.infrastructure\e-learning.infrastructure.csproj" />
   </ItemGroup>
