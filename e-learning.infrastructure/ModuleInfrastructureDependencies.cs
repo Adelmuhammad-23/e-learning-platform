@@ -15,6 +15,7 @@ namespace e_learning.infrastructure
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ITopPricedCoursesView<TopPricedCourses>, TopPricedCoursesView>();
             services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
+            services.AddTransient<IVideoRepository, VideoRepository>();
 
             return services;
 
