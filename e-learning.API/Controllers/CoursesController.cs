@@ -1,4 +1,5 @@
 ﻿using e_learning.API.Base;
+using e_learning.Core.Features.Courses.Commands.Models;
 using e_learning.Core.Features.Courses.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,9 @@ namespace e_learning.API.Controllers
 
         [HttpGet("{categoryId}")]
         public async Task<IActionResult> GetCoursesByCategoryId([FromRoute] int categoryId) => NewResult(await Mediator.Send(new GetAllCoursesByCategoryIdQuery(categoryId)));
+
+        [HttpPost()]
+        public async Task<IActionResult> AddCourse([FromBody] AddCourseCommand courseCommand) => NewResult(await Mediator.Send(courseCommand));
 
     }
 }

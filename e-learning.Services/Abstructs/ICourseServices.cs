@@ -8,5 +8,6 @@ namespace e_learning.Services.Abstructs
         public Task<List<Course>> GetAllCoursesAsync();
         public Task<List<Course>> GetCoursesByCategoryIdAsync(int id);
         public Task<List<TopPricedCourses>> GetTopPricedCourses();
+        public Task<string> AddCourse(Course course);
     }
 }

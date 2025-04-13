@@ -17,6 +17,8 @@ namespace e_learning.infrastructure.Implementation
         {
             _context = context;
         }
+
+
         #endregion
 
 
@@ -30,6 +32,13 @@ namespace e_learning.infrastructure.Implementation
         {
             var courses = await _context.courses.AsNoTracking().Where(c => c.CategoryId == id).ToListAsync();
             return courses;
+        }
+
+        public async Task<string> AddCourse(Course course)
+        {
+            await _context.courses.AddAsync(course);
+            await _context.SaveChangesAsync();
+            return "AddSuccessfully";
         }
 
         #endregion
