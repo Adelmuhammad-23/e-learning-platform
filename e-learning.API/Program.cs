@@ -11,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddCors(option => {
+    option.AddPolicy("allowCors", policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }
+    
+    );
+});
+
 
 #region Connect SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefultConnection");
@@ -48,7 +54,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseCors("allowCors");
 
 app.UseHttpsRedirection();
 

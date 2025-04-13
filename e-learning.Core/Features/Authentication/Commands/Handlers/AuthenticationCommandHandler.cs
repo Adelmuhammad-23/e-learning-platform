@@ -125,7 +125,7 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
         public async Task<Responses<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             //Check if user is exist or not
-            var user = await _userManager.FindByNameAsync(request.UserName);
+            var user = await _userManager.FindByEmailAsync(request.Email);
             //Return The UserName Not Found
             if (user == null) return BadRequest<JwtAuthResult>("User Name Is Not Exist");
             //try To Sign in 
