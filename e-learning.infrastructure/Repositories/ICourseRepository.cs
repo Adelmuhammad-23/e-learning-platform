@@ -6,5 +6,6 @@ namespace e_learning.infrastructure.Repositories
     {
         public Task<List<Course>> GetAllCoursesAsync();
         public Task<List<Course>> GetCoursesByCategoryIdAsync(int id);
+        public Task<string> AddCourse(Course course);
     }
 }

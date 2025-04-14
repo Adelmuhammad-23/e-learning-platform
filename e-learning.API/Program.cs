@@ -44,6 +44,7 @@ builder.Services.AddCoreDependencis()
                 .AddServiceRegistrationDependencis(builder.Configuration);
 
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IUrlHelper>(x =>
 {
     var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;

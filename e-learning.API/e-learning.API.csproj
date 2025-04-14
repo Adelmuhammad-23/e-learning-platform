@@ -32,4 +32,8 @@
     <ProjectReference Include="..\e-learning.Services\e-learning.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
