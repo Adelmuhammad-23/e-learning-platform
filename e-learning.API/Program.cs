@@ -1,8 +1,11 @@
 using e_learning.Core;
 using e_learning.Core.Middlewares;
+using e_learning.Data.Entities.Identity;
 using e_learning.infrastructure;
 using e_learning.infrastructure.Context;
+using e_learning.infrastructure.Seeder;
 using e_learning.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -62,6 +65,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+#region Seeder
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+#endregion
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseSwagger();

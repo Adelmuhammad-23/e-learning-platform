@@ -31,6 +31,10 @@ namespace e_learning.Core.Features.Authentication.Commands.Validatiors
               .NotEmpty()
                 .NotNull()
                 .MaximumLength(100);
+            RuleFor(x => x.RoleName)
+              .NotEmpty()
+                .NotNull()
+                .MaximumLength(100);
             RuleFor(x => x.Password)
               .NotEmpty()
                 .NotNull()

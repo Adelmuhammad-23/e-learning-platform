@@ -23,6 +23,7 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUrlHelper _urlHelper;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailServices _emailServices;
 
@@ -32,13 +33,16 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
 
         #region Constructors
         public AuthenticationCommandHandler(IHttpContextAccessor contextAccessor,
-                                            IUrlHelper urlHelper, UserManager<User> userManager,
+                                            IUrlHelper urlHelper,
+                                            UserManager<User> userManager,
+                                            RoleManager<Role> roleManager,
                                             IEmailServices emailServices,
                                             SignInManager<User> signInManager,
                                             IMapper mapper,
                                             IAuthenticationServices authenticationService)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _mapper = mapper;
             _authenticationService = authenticationService;
             _signInManager = signInManager;
@@ -61,6 +65,13 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                 return BadRequest<string>("Email is already exist!");
 
             var registerUser = await _userManager.CreateAsync(user, request.Password);
+
+            var role = _roleManager.FindByNameAsync(request.RoleName.ToLowerInvariant());
+            if (request.RoleName is null)
+                return Success("Role is not valid");
+
+            await _userManager.AddToRoleAsync(user, request.RoleName);
+
             //Send Confirm Email
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var requestAccessor = _contextAccessor.HttpContext.Request;
