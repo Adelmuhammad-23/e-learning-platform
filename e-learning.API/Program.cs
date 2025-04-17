@@ -74,7 +74,9 @@ using (var scope = app.Services.CreateScope())
     await UserSeeder.SeedAsync(userManager);
 }
 #endregion
-// Configure the HTTP request pipeline.
+//Configure the HTTP request pipeline.
+app.UseStaticFiles();
+
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
