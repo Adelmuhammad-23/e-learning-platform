@@ -9,6 +9,7 @@ namespace e_learning.Core.Mapping.CoursesMapping
             GetAllCoursesMapping();
             GetAllCoursesByCategoryIdMapping();
             GetTopPricedCoursesMapping();
+            AddCourseMapping();
         }
     }
 }

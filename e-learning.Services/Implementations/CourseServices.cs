@@ -22,6 +22,14 @@ namespace e_learning.Services.Implementations
             _courseRepository = courseRepository;
             _topPricedCourses = topPricedCourses;
         }
+
+        public async Task<string> AddCourse(Course course)
+        {
+            var addCourse = await _courseRepository.AddCourse(course);
+            if (addCourse != null)
+                return addCourse;
+            return "failed to add course";
+        }
         #endregion
 
         #region Functions

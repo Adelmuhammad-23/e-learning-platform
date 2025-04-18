@@ -13,6 +13,7 @@ namespace e_learning.Services
             services.AddTransient<ICategoryServices, CategoryServices>();
             services.AddTransient<IAuthenticationServices, AuthenticationServices>();
             services.AddTransient<IEmailServices, EmailServices>();
+            services.AddTransient<IVideoServices, VideoServices>();
 
 
             return services;
