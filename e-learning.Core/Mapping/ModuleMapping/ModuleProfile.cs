@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace e_learning.Core.Mapping.ModuleMapping.CommandMapping
+namespace e_learning.Core.Mapping.ModuleMapping
 {
     public partial class ModuleProfile : Profile
     {

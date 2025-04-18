@@ -24,5 +24,16 @@ namespace e_learning.infrastructure.Implementation
         }
         #endregion
 
+
+        public async Task<Video> GetVideoByIdAsync(int id)
+        {
+            return await _context.videos.FindAsync(id);
+        }
+
+        public async Task DeleteVideoAsync(Video video)
+        {
+            _context.videos.Remove(video);
+            await _context.SaveChangesAsync();
+        }
     }
 }
