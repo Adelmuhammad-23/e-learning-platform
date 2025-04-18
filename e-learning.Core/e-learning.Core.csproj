@@ -29,6 +29,10 @@
     <Folder Include="Features\Instructors\Queries\Handlers\" />
     <Folder Include="Features\Instructors\Queries\Models\" />
     <Folder Include="Features\Instructors\Queries\Responses\" />
+    <Folder Include="Features\Modules\Commands\Validatiors\" />
+    <Folder Include="Features\Modules\Queries\Handlers\" />
+    <Folder Include="Features\Modules\Queries\Models\" />
+    <Folder Include="Features\Modules\Queries\Responses\" />
     <Folder Include="Features\Videos\Queries\Handlers\" />
     <Folder Include="Features\Videos\Queries\Models\" />
     <Folder Include="Features\Videos\Queries\Responses\" />
