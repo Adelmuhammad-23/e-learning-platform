@@ -20,6 +20,7 @@ namespace e_learning.Core.Features.Modules.Commands.Handlers
         {
             _moduleService = moduleService;
             _videoService = videoService;
+
             _mapper = mapper;
         }
         public async Task<Responses<string>> Handle(AddModuleCommand request, CancellationToken cancellationToken)
@@ -73,5 +74,6 @@ namespace e_learning.Core.Features.Modules.Commands.Handlers
                 default: return BadRequest<string>();
             }
         }
+
     }
 }

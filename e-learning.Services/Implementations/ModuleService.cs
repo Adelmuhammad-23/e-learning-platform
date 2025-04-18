@@ -43,6 +43,7 @@ namespace e_learning.Services.Implementations
             {
                 File = new FileDescription(dto.VideoFile.FileName, dto.VideoFile.OpenReadStream()),
                 PublicId = $"modules/{Guid.NewGuid()}"
+
             };
 
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
@@ -60,6 +61,7 @@ namespace e_learning.Services.Implementations
                 Duration = TimeSpan.FromSeconds(durationInSeconds),
                 ModuleId = dto.ModuleId,
                 PublicId = uploadResult.PublicId
+
             };
 
             await _videoRepository.Addvideo(video);
