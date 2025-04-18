@@ -7,7 +7,8 @@ namespace e_learning.Core.Mapping.CoursesMapping
     {
         public void AddCourseMapping()
         {
-            CreateMap<AddCourseCommand, Course>();
+            CreateMap<AddCourseCommand, Course>()
+                .ForMember(dest => dest.Image, src => src.MapFrom(i => i.Image));
         }
 
     }

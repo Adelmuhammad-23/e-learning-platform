@@ -26,7 +26,7 @@ namespace e_learning.Core.Features.Courses.Commands.Handlers
         public async Task<Responses<string>> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
             var courseMapping = _mapper.Map<Course>(request);
-            var courseResult = await _courseServices.AddCourse(courseMapping);
+            var courseResult = await _courseServices.AddCourse(courseMapping, request.Image);
             if (courseResult != null)
                 return Success("Add Course is successfully");
             return BadRequest<string>("Failed to add course");

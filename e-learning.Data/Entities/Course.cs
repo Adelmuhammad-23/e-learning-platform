@@ -3,6 +3,7 @@
     public class Course
     {
         public int Id { get; set; }
+        public string? Image { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int InstructorId { get; set; }
@@ -12,8 +13,8 @@
 
         public int CategoryId { get; set; }
 
-        // Navigation Property
-        public List<Video> Videos { get; set; } = new();
+        // Navigation Properties
+        public List<Module> Modules { get; set; } = new();
         public Category Category { get; set; }
 
     }
