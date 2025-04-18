@@ -38,7 +38,7 @@ namespace e_learning.API.Controllers
             return NewResult(response);
         }
 
-        [HttpGet("ConfirmResetPassword")]
+        [HttpPost("ConfirmResetPassword")]
         public async Task<IActionResult> ConfirmResetPassword([FromQuery] ConfirmResetPasswordQuery query)
         {
             var response = await Mediator.Send(query);

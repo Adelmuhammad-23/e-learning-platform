@@ -1,8 +1,12 @@
 using e_learning.Core;
 using e_learning.Core.Middlewares;
+using e_learning.Data.Entities.Identity;
+using e_learning.Data.Helpers;
 using e_learning.infrastructure;
 using e_learning.infrastructure.Context;
+using e_learning.infrastructure.Seeder;
 using e_learning.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -57,6 +61,9 @@ builder.Services.AddTransient<IUrlHelper>(x =>
     return factory.GetUrlHelper(actionContext);
 });
 
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+
+
 #endregion
 
 
@@ -67,7 +74,19 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region Seeder
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+#endregion
+//Configure the HTTP request pipeline.
+app.UseStaticFiles();
+
+
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();

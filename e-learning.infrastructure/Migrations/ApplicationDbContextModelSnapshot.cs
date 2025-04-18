@@ -264,6 +264,10 @@ namespace e_learning.infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -351,7 +355,7 @@ namespace e_learning.infrastructure.Migrations
                     b.ToTable("instructors");
                 });
 
-            modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
+            modelBuilder.Entity("e_learning.Data.Entities.Module", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -362,8 +366,30 @@ namespace e_learning.infrastructure.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Modules");
+                });
+
+            modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -375,7 +401,7 @@ namespace e_learning.infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("ModuleId");
 
                     b.ToTable("videos");
                 });
@@ -495,15 +521,26 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
+            modelBuilder.Entity("e_learning.Data.Entities.Module", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Course", "Course")
-                        .WithMany("Videos")
+                        .WithMany("Modules")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
+                {
+                    b.HasOne("e_learning.Data.Entities.Module", "Module")
+                        .WithMany("Videos")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Category", b =>
@@ -513,7 +550,7 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Course", b =>
                 {
-                    b.Navigation("Videos");
+                    b.Navigation("Modules");
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Identity.User", b =>
@@ -524,6 +561,11 @@ namespace e_learning.infrastructure.Migrations
             modelBuilder.Entity("e_learning.Data.Entities.Instructor", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("e_learning.Data.Entities.Module", b =>
+                {
+                    b.Navigation("Videos");
                 });
 #pragma warning restore 612, 618
         }
