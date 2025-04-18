@@ -17,7 +17,7 @@ namespace e_learning.API.Controllers
         public async Task<IActionResult> GetCoursesByCategoryId([FromRoute] int categoryId) => NewResult(await Mediator.Send(new GetAllCoursesByCategoryIdQuery(categoryId)));
 
         [HttpPost()]
-        public async Task<IActionResult> AddCourse([FromBody] AddCourseCommand courseCommand) => NewResult(await Mediator.Send(courseCommand));
+        public async Task<IActionResult> AddCourse([FromForm] AddCourseCommand courseCommand) => NewResult(await Mediator.Send(courseCommand));
 
     }
 }

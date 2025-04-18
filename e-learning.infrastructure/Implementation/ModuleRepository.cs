@@ -54,6 +54,7 @@ namespace e_learning.infrastructure.Implementation
                 _context.Modules.Remove(module);
                 await _context.SaveChangesAsync();
             }
+
         }
 
         public async Task<bool> ExistsAsync(int id)

@@ -43,7 +43,7 @@ namespace e_learning.Services.Implementations
             {
                 File = new FileDescription(dto.VideoFile.FileName, dto.VideoFile.OpenReadStream()),
                 PublicId = $"modules/{Guid.NewGuid()}"
-                // مفيش داعي تكتب ResourceType هنا لأنه بيتظبط تلقائي كـ "video"
+
             };
 
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
@@ -59,13 +59,54 @@ namespace e_learning.Services.Implementations
                 Title = dto.Title,
                 Url = uploadResult.SecureUrl.ToString(),
                 Duration = TimeSpan.FromSeconds(durationInSeconds),
-                ModuleId = dto.ModuleId
+                ModuleId = dto.ModuleId,
+                PublicId = uploadResult.PublicId
+
             };
 
             await _videoRepository.Addvideo(video);
 
             return "Video uploaded and saved to module successfully";
         }
+        public async Task<string> DeleteVideoFromModuleAsync(int videoId)
+        {
+            var video = await _videoRepository.GetVideoByIdAsync(videoId);
+            if (video == null)
+                return "Video not found";
+
+            var deletionParams = new DeletionParams(video.PublicId)
+            {
+                ResourceType = ResourceType.Video
+            };
+            var deletionResult = await _cloudinary.DestroyAsync(deletionParams);
+
+            if (deletionResult.Result != "ok")
+                return "Failed to delete from Cloudinary";
+
+            await _videoRepository.DeleteVideoAsync(video);
+
+            return "Video deleted successfully";
+        }
+
+        public async Task<string> DeleteAsync(int id)
+        {
+            var isExist = await _moduleRepository.ExistsAsync(id);
+            if (!isExist)
+                return "NotFound";
+
+            await _moduleRepository.DeleteAsync(id);
+            return "Deleted";
+        }
+
+        public async Task<string> UpdateAsync(Module module)
+        {
+            var isExist = await _moduleRepository.ExistsAsync(module.Id);
+            if (!isExist)
+                return "NotFound";
+            await _moduleRepository.UpdateAsync(module);
+            return "Updated";
+        }
+
     }
 
 }

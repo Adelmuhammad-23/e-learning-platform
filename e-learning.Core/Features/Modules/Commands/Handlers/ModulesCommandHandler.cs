@@ -8,13 +8,19 @@ using MediatR;
 namespace e_learning.Core.Features.Modules.Commands.Handlers
 {
     public class ModulesCommandHandler : ResponsesHandler,
-        IRequestHandler<AddModuleCommand, Responses<string>>
+        IRequestHandler<AddModuleCommand, Responses<string>>,
+        IRequestHandler<AddVideoToModuleCommand, Responses<string>>,
+        IRequestHandler<UpdateModuleCommand, Responses<string>>,
+        IRequestHandler<DeleteVideoFromModuleCommand, Responses<string>>
     {
         private readonly IModuleService _moduleService;
+        private readonly IVideoServices _videoService;
         private readonly IMapper _mapper;
-        public ModulesCommandHandler(IModuleService moduleService, IMapper mapper)
+        public ModulesCommandHandler(IModuleService moduleService, IVideoServices videoService, IMapper mapper)
         {
             _moduleService = moduleService;
+            _videoService = videoService;
+
             _mapper = mapper;
         }
         public async Task<Responses<string>> Handle(AddModuleCommand request, CancellationToken cancellationToken)
@@ -25,5 +31,49 @@ namespace e_learning.Core.Features.Modules.Commands.Handlers
                 return Success("Add Module is Successfully");
             return BadRequest<string>("Failed to add Module");
         }
+
+        public async Task<Responses<string>> Handle(AddVideoToModuleCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _moduleService.AddVideoToModuleAsync(request);
+            switch (result)
+            {
+                case "Video upload failed":
+                    return BadRequest<string>("Video upload failed");
+                case "Video uploaded and saved to module successfully":
+                    return Success("Video uploaded and saved to module successfully");
+                default: return BadRequest<string>("Failed to add Module");
+            }
+        }
+
+        public async Task<Responses<string>> Handle(UpdateModuleCommand request, CancellationToken cancellationToken)
+        {
+            var moduleMapping = _mapper.Map<Module>(request);
+            var result = await _moduleService.UpdateAsync(moduleMapping);
+            switch (result)
+            {
+                case "NotFound":
+                    return NotFound<string>("NotFound");
+                case "Updated":
+                    return Success("Updated");
+                default: return BadRequest<string>("Failed to update Module");
+            }
+        }
+
+        public async Task<Responses<string>> Handle(DeleteVideoFromModuleCommand request, CancellationToken cancellationToken)
+        {
+            var videoExist = await _moduleService.DeleteVideoFromModuleAsync(request.Id);
+            switch (videoExist)
+            {
+                case "Video not found":
+                    return NotFound<string>("Video not found");
+                case "Failed to delete from Cloudinary":
+                    return BadRequest<string>("Failed to delete from Cloudinary");
+                case "Video deleted successfully":
+                    return Success("Video deleted successfully");
+
+                default: return BadRequest<string>();
+            }
+        }
+
     }
 }

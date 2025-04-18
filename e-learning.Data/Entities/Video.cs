@@ -7,6 +7,8 @@
         public string Url { get; set; }
         public int ModuleId { get; set; }
         public TimeSpan Duration { get; set; }
+        public string PublicId { get; set; }
+
 
         // Navigation Property
         public Module Module { get; set; }
