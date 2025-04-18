@@ -1,10 +1,12 @@
 ﻿using e_learning.Core.Bases;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace e_learning.Core.Features.Courses.Commands.Models
 {
     public class AddCourseCommand : IRequest<Responses<string>>
     {
+        public IFormFile? Image { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int InstructorId { get; set; }

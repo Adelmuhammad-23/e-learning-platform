@@ -1,4 +1,5 @@
-﻿using e_learning.Core.Features.Videos.Commands.Models;
+﻿using e_learning.Core.Features.Modules.Commands.Models;
+using e_learning.Core.Features.Videos.Commands.Models;
 using e_learning.Data.Entities;
 
 namespace e_learning.Core.Mapping.VideosMapping
@@ -9,6 +10,9 @@ namespace e_learning.Core.Mapping.VideosMapping
         {
             CreateMap<AddVideoInCourse, Video>()
                 .ForMember(dest => dest.Url, src => src.MapFrom(v => v.videoFile));
+
+            CreateMap<AddVideoToModuleCommand, Video>()
+               .ForMember(dest => dest.Url, src => src.MapFrom(v => v.VideoFile));
 
         }
     }
