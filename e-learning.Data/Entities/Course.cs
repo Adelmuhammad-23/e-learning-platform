@@ -12,8 +12,8 @@
 
         public int CategoryId { get; set; }
 
-        // Navigation Property
-        public List<Video> Videos { get; set; } = new();
+        // Navigation Properties
+        public List<Module> Modules { get; set; } = new();
         public Category Category { get; set; }
 
     }

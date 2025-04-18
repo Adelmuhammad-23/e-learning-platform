@@ -1,6 +1,7 @@
 using e_learning.Core;
 using e_learning.Core.Middlewares;
 using e_learning.Data.Entities.Identity;
+using e_learning.Data.Helpers;
 using e_learning.infrastructure;
 using e_learning.infrastructure.Context;
 using e_learning.infrastructure.Seeder;
@@ -54,6 +55,9 @@ builder.Services.AddTransient<IUrlHelper>(x =>
     var factory = x.GetRequiredService<IUrlHelperFactory>();
     return factory.GetUrlHelper(actionContext);
 });
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+
 
 #endregion
 
