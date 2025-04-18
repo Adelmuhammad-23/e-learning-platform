@@ -10,5 +10,6 @@ namespace e_learning.Services.Abstructs
         public Task<string> AddModuleAsync(Module module);
         Task<string> DeleteAsync(int id);
         Task<string> UpdateAsync(Module module);
+
     }
 }

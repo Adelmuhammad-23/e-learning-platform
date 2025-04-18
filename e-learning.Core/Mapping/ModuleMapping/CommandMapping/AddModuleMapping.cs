@@ -2,6 +2,7 @@
 using e_learning.Data.Entities;
 
 namespace e_learning.Core.Mapping.ModuleMapping
+
 {
     public partial class ModuleProfile
     {
@@ -9,6 +10,7 @@ namespace e_learning.Core.Mapping.ModuleMapping
         {
             CreateMap<AddModuleCommand, Module>();
             CreateMap<UpdateModuleCommand, Module>();
+
         }
     }
 }
