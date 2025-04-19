@@ -28,10 +28,11 @@ namespace e_learning.infrastructure.Implementation
 
         public async Task<List<Module>> GetByCourseIdAsync(int courseId)
         {
-            return await _context.Modules
+            var moduls = await _context.Modules
                 .Where(m => m.CourseId == courseId)
                 .Include(m => m.Videos)
                 .ToListAsync();
+            return moduls;
         }
 
         public async Task AddAsync(Module module)

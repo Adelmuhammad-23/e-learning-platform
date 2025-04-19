@@ -4,6 +4,7 @@ using e_learning.infrastructure.Context;
 using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
@@ -46,6 +47,26 @@ namespace e_learning.Services.Implementations
         #endregion
 
         #region Handle Functions
+
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _dbContext.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitAsync()
+        {
+            await _dbContext.Database.CommitTransactionAsync();
+        }
+
+        public async Task RollbackAsync()
+        {
+            await _dbContext.Database.RollbackTransactionAsync();
+        }
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
         public async Task<JwtAuthResult> GetJwtToken(User user)
         {
             var (jwtToken, accessToken) = await GetJWTToken(user);
@@ -77,6 +98,8 @@ namespace e_learning.Services.Implementations
         #region Claims Functions
         public async Task<List<Claim>> GetClaims(User user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
+
             var claims = new List<Claim>()
             {
                 new Claim(nameof(UserClaimModel.UserName), user.UserName),
@@ -84,9 +107,12 @@ namespace e_learning.Services.Implementations
                 new Claim(nameof(UserClaimModel.Id), user.Id.ToString()),
                 new Claim(ClaimTypes.NameIdentifier,user.UserName)
 
+
             };
-
-
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            claims.AddRange(userClaims);
             return claims;
         }
         #endregion
