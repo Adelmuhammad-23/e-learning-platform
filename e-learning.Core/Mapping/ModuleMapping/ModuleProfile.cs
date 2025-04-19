@@ -7,6 +7,7 @@ namespace e_learning.Core.Mapping.ModuleMapping
         public ModuleProfile()
         {
             AddModuleMapping();
+            GetByCourseIdMapping();
         }
     }
 }
