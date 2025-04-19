@@ -17,6 +17,7 @@ namespace e_learning.infrastructure
             services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
             services.AddTransient<IVideoRepository, VideoRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();
+            services.AddTransient<IInstructorRepository, InstructorRepository>();
 
             return services;
 

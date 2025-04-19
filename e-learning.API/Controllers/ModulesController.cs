@@ -1,5 +1,6 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Modules.Commands.Models;
+using e_learning.Core.Features.Modules.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
@@ -8,6 +9,9 @@ namespace e_learning.API.Controllers
     [ApiController]
     public class ModulesController : AppControllerBase
     {
+        [HttpGet("Course/{id}")]
+        public async Task<IActionResult> GetModulesInCourseAsync([FromRoute] int id) => NewResult(await Mediator.Send(new GetByCourseIdQuery(id)));
+
         [HttpPost]
         public async Task<IActionResult> AddModuleAsync(AddModuleCommand moduleCommand) => NewResult(await Mediator.Send(moduleCommand));
 

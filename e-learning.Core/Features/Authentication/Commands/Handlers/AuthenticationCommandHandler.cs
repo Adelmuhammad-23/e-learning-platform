@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using e_learning.Core.Bases;
 using e_learning.Core.Features.Authentication.Commands.Models;
+using e_learning.Data.Entities;
 using e_learning.Data.Entities.Identity;
 using e_learning.Data.Helpers;
 using e_learning.Services.Abstructs;
@@ -26,7 +27,7 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
         private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailServices _emailServices;
-
+        private readonly IInstructorService _instructorService;
         private readonly IAuthenticationServices _authenticationService;
         private readonly IMapper _mapper;
         #endregion
@@ -39,7 +40,8 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                                             IEmailServices emailServices,
                                             SignInManager<User> signInManager,
                                             IMapper mapper,
-                                            IAuthenticationServices authenticationService)
+                                            IAuthenticationServices authenticationService,
+                                            IInstructorService instructorService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -49,36 +51,55 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
             _contextAccessor = contextAccessor;
             _urlHelper = urlHelper;
             _emailServices = emailServices;
+            _instructorService = instructorService;
 
         }
         #endregion
         #region Handel Functions
         public async Task<Responses<string>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            var user = _mapper.Map<User>(request);
+            await using var transaction = await _authenticationService.BeginTransactionAsync();
+            try
+            {
+                var user = _mapper.Map<User>(request);
 
-            var checkUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (checkUserName is not null)
-                return BadRequest<string>("User Name is already exist!");
-            var checkUserEmail = await _userManager.FindByEmailAsync(request.Email);
-            if (checkUserEmail is not null)
-                return BadRequest<string>("Email is already exist!");
+                var checkUserName = await _userManager.FindByNameAsync(request.UserName);
+                if (checkUserName is not null)
+                    return BadRequest<string>("User Name is already exist!");
+                var checkUserEmail = await _userManager.FindByEmailAsync(request.Email);
+                if (checkUserEmail is not null)
+                    return BadRequest<string>("Email is already exist!");
 
-            var registerUser = await _userManager.CreateAsync(user, request.Password);
+                var registerUser = await _userManager.CreateAsync(user, request.Password);
 
-            var role = _roleManager.FindByNameAsync(request.RoleName.ToLowerInvariant());
-            if (request.RoleName is null)
-                return Success("Role is not valid");
+                var role = await _roleManager.FindByNameAsync(request.RoleName.ToLowerInvariant());
+                if (request.RoleName is null)
+                    return Success("Role is not valid");
 
-            await _userManager.AddToRoleAsync(user, request.RoleName);
+                await _userManager.AddToRoleAsync(user, request.RoleName);
 
-            //Send Confirm Email
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var requestAccessor = _contextAccessor.HttpContext.Request;
-            var returnUrl = $"{requestAccessor.Scheme}://{requestAccessor.Host}{_urlHelper.Action("ConfirmEmail", "Auth", new { userId = user.Id, code = code })}";
+                if (request.RoleName.Equals("Instructor", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var instructor = new Instructor
+                    {
+                        Name = request.UserName,
+                        Email = request.Email,
+                        Bio = "Please enter your Bio",
+                        Image = null
+                    };
 
-            #region Email Confirmation HTML template
-            var message = $@"
+                    await _instructorService.AddInstructorAsync(instructor);
+                }
+                await _authenticationService.SaveChangesAsync();
+                await _authenticationService.CommitAsync();
+
+                //Send Confirm Email
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var requestAccessor = _contextAccessor.HttpContext.Request;
+                var returnUrl = $"{requestAccessor.Scheme}://{requestAccessor.Host}{_urlHelper.Action("ConfirmEmail", "Auth", new { userId = user.Id, code = code })}";
+
+                #region Email Confirmation HTML template
+                var message = $@"
                 <html>
                 <head>
                     <style>
@@ -116,21 +137,26 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                     <div class='email-container'>
                         <div class='email-box'>
                             <h2>Confirm Your Email</h2>
-                            <p>Welcome to <strong>E-Learning Platform</strong>! Please confirm your email address to get started.</p>
+                            <p>Welcome to <strong>Xcelerate Platform</strong>! Please confirm your email address to get started.</p>
                             <a href='{returnUrl}' class='button'>Confirm Email</a>
                             <p class='footer'>If you didn’t request this, you can safely ignore this email.</p>
                         </div>
                     </div>
                 </body>
                 </html>";
-            #endregion
+                #endregion
 
-            await _emailServices.SendEmailAsync(user.Email, message, "Confirm Your Email");
+                await _emailServices.SendEmailAsync(user.Email, message, "Confirm Your Email");
 
-            if (!registerUser.Succeeded)
-                return BadRequest<string>(registerUser.Errors.FirstOrDefault().Description);
-
-            return Success("Register is successfully");
+                if (!registerUser.Succeeded)
+                    return BadRequest<string>(registerUser.Errors.FirstOrDefault().Description);
+                return Success("Register is successfully");
+            }
+            catch (Exception ex)
+            {
+                await _authenticationService.RollbackAsync();
+                return BadRequest<string>($"Registration failed: {ex.Message}");
+            }
 
         }
         public async Task<Responses<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
