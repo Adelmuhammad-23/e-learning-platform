@@ -12,7 +12,6 @@ namespace e_learning.Core.Features.Courses.Commands.Models
         public int InstructorId { get; set; }
         public decimal Price { get; set; }
         public double Hours { get; set; } = 0;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public int CategoryId { get; set; }
     }
 }
