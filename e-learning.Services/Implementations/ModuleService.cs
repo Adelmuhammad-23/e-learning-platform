@@ -107,6 +107,16 @@ namespace e_learning.Services.Implementations
             return "Updated";
         }
 
+        public Task<Module> GetModuleByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Module>> GetByCourseIdAsync(int courseId)
+        {
+            var moduls = await _moduleRepository.GetByCourseIdAsync(courseId);
+            return moduls;
+        }
     }
 
 }

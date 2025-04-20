@@ -41,8 +41,18 @@ namespace e_learning.infrastructure.Implementation
             return "AddSuccessfully";
         }
 
-        #endregion
+        public async Task<Course> GetCourseByIdAsync(int id)
+        {
+            var course = await _context.courses.Include(m => m.Modules).AsNoTracking().Where(c => c.Id == id).FirstOrDefaultAsync();
+            return course;
+        }
 
+        public async Task<Course> GetCourseByInstructorIdAsync(int instructorId)
+        {
+            var course = await _context.courses.Include(m => m.Modules).AsNoTracking().Where(c => c.InstructorId == instructorId).FirstOrDefaultAsync();
+            return course;
+        }
+        #endregion
 
     }
 }
