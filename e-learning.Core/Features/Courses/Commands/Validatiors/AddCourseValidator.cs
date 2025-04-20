@@ -20,9 +20,7 @@ namespace e_learning.Core.Features.Courses.Commands.Validatiors
             RuleFor(x => x.Price)
                 .NotEmpty()
                 .NotNull();
-            RuleFor(x => x.UpdatedAt)
-               .NotEmpty()
-                .NotNull();
+
             RuleFor(x => x.InstructorId)
                 .NotEmpty()
                 .NotNull();
