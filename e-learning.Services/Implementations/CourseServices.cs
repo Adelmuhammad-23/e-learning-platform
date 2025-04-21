@@ -63,6 +63,23 @@ namespace e_learning.Services.Implementations
         {
             return await _courseRepository.GetAllCoursesAsync();
         }
+
+        public async Task<Course> GetCourseByIdAsync(int courseId)
+        {
+            var course = await _courseRepository.GetCourseByIdAsync(courseId);
+            if (course == null)
+                return null;
+            return course;
+        }
+
+        public async Task<Course> GetCourseByInstructorIdAsync(int instructorId)
+        {
+            var course = await _courseRepository.GetCourseByInstructorIdAsync(instructorId);
+            if (course == null)
+                return null;
+            return course;
+        }
+
         public async Task<List<Course>> GetCoursesByCategoryIdAsync(int id)
         {
             return await _courseRepository.GetCoursesByCategoryIdAsync(id);

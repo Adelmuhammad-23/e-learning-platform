@@ -8,6 +8,9 @@ namespace e_learning.Core.Mapping.CoursesMapping
         public void GetAllCoursesMapping()
         {
             CreateMap<Course, AllCoursesResponse>();
+            CreateMap<Course, GetCourseResponse>()
+                .ForMember(dest => dest.Modules, src => src.MapFrom(m => m.Modules));
+            CreateMap<Module, ListOfModules>();
         }
     }
 }
