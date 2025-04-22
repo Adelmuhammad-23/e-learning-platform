@@ -18,6 +18,20 @@ namespace e_learning.Services.Implementations
             var reviews = await _repository.GetCourseReviewsAsync(courseId);
             return reviews;
         }
+        public async Task<Reviews> GetByIdAsync(int reviewId)
+        {
+            return await _repository.GetByIdAsync(reviewId);
+        }
+
+        public async Task<bool> DeleteAsync(int reviewId)
+        {
+            return await _repository.DeleteAsync(reviewId);
+        }
+        public async Task<bool> UpdateAsync(Reviews review)
+        {
+            return await _repository.UpdateAsync(review);
+        }
+
 
         public async Task<string> AddReviewAsync(Reviews review)
         {

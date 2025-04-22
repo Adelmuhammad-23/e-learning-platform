@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using e_learning.infrastructure.Context;
 
@@ -11,9 +12,11 @@ using e_learning.infrastructure.Context;
 namespace e_learning.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422211137_updateTableReview")]
+    partial class updateTableReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,7 +395,6 @@ namespace e_learning.infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
-
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CourseId")
@@ -402,7 +404,6 @@ namespace e_learning.infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Rating")
-
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
@@ -609,7 +610,6 @@ namespace e_learning.infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("e_learning.Data.Entities.Student", "Student")
-
                         .WithMany("Reviews")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -618,7 +618,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
-
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
