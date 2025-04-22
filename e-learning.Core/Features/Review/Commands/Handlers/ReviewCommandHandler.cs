@@ -13,6 +13,7 @@ namespace e_learning.Core.Features.Review.Commands.Handlers
         IRequestHandler<AddReviewCommand, Responses<string>>,
         IRequestHandler<DeleteReviewCommand, Responses<string>>,
         IRequestHandler<UpdateReviewCommand, Responses<string>>
+
     {
         private readonly IReviewService _reviewService;
         private readonly ICourseServices _courseServices;
@@ -90,5 +91,6 @@ namespace e_learning.Core.Features.Review.Commands.Handlers
         }
 
     }
+
 
 }

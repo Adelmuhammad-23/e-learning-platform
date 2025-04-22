@@ -8,6 +8,7 @@ namespace e_learning.infrastructure.Repositories
         Task<bool> DeleteAsync(int reviewId);
         Task<bool> UpdateAsync(Reviews review);
 
+
         Task<List<Reviews>> GetCourseReviewsAsync(int courseId);
         Task<string> AddReviewAsync(Reviews review);
 

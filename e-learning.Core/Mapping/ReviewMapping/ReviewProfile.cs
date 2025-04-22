@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using e_learning.Core.Features.Review.Commands.Models;
 using e_learning.Core.Features.Review.Queries.Responses;
+
 using e_learning.Data.Entities;
 
 namespace e_learning.Core.Mapping.ReviewMapping
@@ -15,6 +16,7 @@ namespace e_learning.Core.Mapping.ReviewMapping
 
             CreateMap<Reviews, GetReviewByIdResponse>()
                 .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.Name));
+
 
         }
     }
