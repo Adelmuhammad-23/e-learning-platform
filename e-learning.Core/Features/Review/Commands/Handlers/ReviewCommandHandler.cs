@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Identity;
 namespace e_learning.Core.Features.Review.Commands.Handlers
 {
     public class ReviewCommandHandler : ResponsesHandler,
-        IRequestHandler<AddReviewCommand, Responses<string>>
+        IRequestHandler<AddReviewCommand, Responses<string>>,
+        IRequestHandler<DeleteReviewCommand, Responses<string>>,
+        IRequestHandler<UpdateReviewCommand, Responses<string>>
     {
         private readonly IReviewService _reviewService;
         private readonly ICourseServices _courseServices;
@@ -53,5 +55,40 @@ namespace e_learning.Core.Features.Review.Commands.Handlers
                     return BadRequest<string>("error when check token is valid or not");
             }
         }
+        public async Task<Responses<string>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
+        {
+            var token = await _authenticationServices.ValidateToken(request.Token);
+            switch (token)
+            {
+                case "InvalidToken":
+                    return Unauthorized<string>("Token is not valid");
+                case "NotExpired":
+                    {
+                        var review = await _reviewService.GetByIdAsync(request.ReviewId);
+                        if (review == null)
+                            return NotFound<string>("Review not found");
+
+                        review.Rating = request.Rating;
+                        review.Comment = request.Comment;
+
+                        var updated = await _reviewService.UpdateAsync(review);
+                        return updated
+                            ? Success("Review updated successfully")
+                            : BadRequest<string>("Failed to update review");
+                    }
+                default:
+                    return BadRequest<string>("Error validating token");
+            }
+        }
+
+        public async Task<Responses<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
+        {
+            var deleted = await _reviewService.DeleteAsync(request.ReviewId);
+            return deleted
+                ? Success("Review deleted successfully")
+                : NotFound<string>("Review not found");
+        }
+
     }
+
 }
