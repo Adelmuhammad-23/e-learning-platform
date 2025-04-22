@@ -1,6 +1,7 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Review.Commands.Models;
 using e_learning.Core.Features.Review.Queries.Models;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
@@ -32,5 +33,6 @@ namespace e_learning.API.Controllers
         [HttpDelete("{reviewId}")]
         public async Task<IActionResult> DeleteReviewAsync(int reviewId) =>
             NewResult(await Mediator.Send(new DeleteReviewCommand(reviewId)));
+
     }
 }

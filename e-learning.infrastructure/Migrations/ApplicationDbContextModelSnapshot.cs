@@ -392,6 +392,7 @@ namespace e_learning.infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
+
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CourseId")
@@ -401,6 +402,7 @@ namespace e_learning.infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Rating")
+
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
@@ -607,6 +609,7 @@ namespace e_learning.infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("e_learning.Data.Entities.Student", "Student")
+
                         .WithMany("Reviews")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -615,6 +618,7 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
