@@ -18,6 +18,7 @@ namespace e_learning.infrastructure
             services.AddTransient<IVideoRepository, VideoRepository>();
             services.AddTransient<IModuleRepository, ModuleRepository>();
             services.AddTransient<IInstructorRepository, InstructorRepository>();
+            services.AddTransient<IReviewRepository, ReviewRepository>();
 
             return services;
 

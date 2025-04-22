@@ -27,9 +27,17 @@ namespace e_learning.Core.Features.Courses.Commands.Handlers
         {
             var courseMapping = _mapper.Map<Course>(request);
             var courseResult = await _courseServices.AddCourse(courseMapping, request.Image);
-            if (courseResult != null)
-                return Success("Add Course is successfully");
-            return BadRequest<string>("Failed to add course");
+            switch (courseResult)
+            {
+                case "NotAuthorized":
+                    return Unauthorized<string>("Not Authorized");
+                case "InstructorNotFound":
+                    return NotFound<string>("Instructor Not Found");
+                case "Success":
+                    return Success("Success");
+                default:
+                    return BadRequest<string>("Failed to add course");
+            }
         }
         #endregion
     }
