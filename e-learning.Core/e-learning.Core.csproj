@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Reviews\**" />
     <Compile Remove="Mapping\AuthMapping\**" />
+    <EmbeddedResource Remove="Features\Reviews\**" />
     <EmbeddedResource Remove="Mapping\AuthMapping\**" />
+    <None Remove="Features\Reviews\**" />
     <None Remove="Mapping\AuthMapping\**" />
   </ItemGroup>
 
@@ -25,6 +28,10 @@
     <Folder Include="Features\Categories\Commands\Validatiors\" />
     <Folder Include="Features\Instructors\Commands\Validatiors\" />
     <Folder Include="Features\Modules\Commands\Validatiors\" />
+    <Folder Include="Features\Review\Commands\Validatiors\" />
+    <Folder Include="Features\Review\Queries\Handlers\" />
+    <Folder Include="Features\Review\Queries\Models\" />
+    <Folder Include="Features\Review\Queries\Responses\" />
     <Folder Include="Features\Videos\Queries\Handlers\" />
     <Folder Include="Features\Videos\Queries\Models\" />
     <Folder Include="Features\Videos\Queries\Responses\" />

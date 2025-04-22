@@ -31,6 +31,7 @@ namespace e_learning.infrastructure.Implementation
         public async Task<List<Course>> GetCoursesByCategoryIdAsync(int id)
         {
             var courses = await _context.courses.AsNoTracking().Where(c => c.CategoryId == id).ToListAsync();
+
             return courses;
         }
 
@@ -40,10 +41,15 @@ namespace e_learning.infrastructure.Implementation
             await _context.SaveChangesAsync();
             return "AddSuccessfully";
         }
-
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.courses.AnyAsync(m => m.Id == id);
+        }
         public async Task<Course> GetCourseByIdAsync(int id)
         {
             var course = await _context.courses.Include(m => m.Modules).AsNoTracking().Where(c => c.Id == id).FirstOrDefaultAsync();
+            if (course == null)
+                return null;
             return course;
         }
 

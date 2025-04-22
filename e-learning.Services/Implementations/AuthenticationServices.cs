@@ -67,6 +67,41 @@ namespace e_learning.Services.Implementations
         {
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<string> ValidateToken(string accessToken)
+        {
+
+            var handler = new JwtSecurityTokenHandler();
+            var parameterHandler = new TokenValidationParameters
+            {
+                ValidateIssuer = _jwtSettings.ValidateIssuer,
+                ValidIssuers = new[] { _jwtSettings.Issuer },
+                ValidateIssuerSigningKey = _jwtSettings.ValidateIssuerSigningKey,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret)),
+                ValidAudience = _jwtSettings.Audience,
+                ValidateAudience = _jwtSettings.ValidateAudience,
+                ValidateLifetime = _jwtSettings.ValidateLifeTime,
+            };
+
+            try
+            {
+                var validator = handler.ValidateToken(accessToken, parameterHandler, out SecurityToken validatedToken);
+
+                if (validatedToken == null)
+                {
+                    return "InvalidToken";
+                }
+                return "NotExpired";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+
+
+
         public async Task<JwtAuthResult> GetJwtToken(User user)
         {
             var (jwtToken, accessToken) = await GetJWTToken(user);
