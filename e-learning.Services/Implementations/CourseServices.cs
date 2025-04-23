@@ -17,6 +17,8 @@ namespace e_learning.Services.Implementations
         private readonly ICourseRepository _courseRepository;
         private readonly IInstructorRepository _instructorRepository;
         private readonly UserManager<User> _userManager;
+        private readonly IInstructorRepository _instructorRepository;
+
         private readonly RoleManager<Role> _roleManager;
         private readonly ITopPricedCoursesView<TopPricedCourses> _topPricedCourses;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -50,6 +52,7 @@ namespace e_learning.Services.Implementations
             if (inst == null)
                 return "Not Authorized because Instructor Not Found";
             course.InstructorId = inst.Id;
+
             var webRootPath = _webHost.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             var uploadsFolder = Path.Combine(webRootPath, "uploads", "images");
 
