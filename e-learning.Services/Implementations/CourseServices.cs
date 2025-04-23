@@ -15,9 +15,8 @@ namespace e_learning.Services.Implementations
     {
         #region Fields
         private readonly ICourseRepository _courseRepository;
-        private readonly UserManager<User> _userManager;
         private readonly IInstructorRepository _instructorRepository;
-
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly ITopPricedCoursesView<TopPricedCourses> _topPricedCourses;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -46,10 +45,11 @@ namespace e_learning.Services.Implementations
         {
             var request = _httpContextAccessor.HttpContext?.Request;
             if (request == null) return "Failed to get request context";
-            var instructor = await _instructorRepository.GetByIdAsync(course.InstructorId);
-            if (instructor == null)
-                return "Not Authorized because Instructor Not Found";
 
+            var inst = await _instructorRepository.GetByEmailAsync(course.InstructorEmail);
+            if (inst == null)
+                return "Not Authorized because Instructor Not Found";
+            course.InstructorId = inst.Id;
             var webRootPath = _webHost.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             var uploadsFolder = Path.Combine(webRootPath, "uploads", "images");
 

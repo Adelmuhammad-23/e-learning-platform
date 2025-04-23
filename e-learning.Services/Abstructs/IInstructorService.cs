@@ -8,6 +8,7 @@ namespace e_learning.Services.Abstructs
     {
         Task<List<Instructor>> GetAllInstructorsAsync();
         Task<Instructor?> GetInstructorByIdAsync(int id);
+        Task<Instructor?> GetInstructorByEmailAsync(string email);
         Task AddInstructorAsync(Instructor instructor);
 
         Task<bool> UpdateInstructorAsync(int id, Instructor updatedInstructor, IFormFile ImageUrl);
