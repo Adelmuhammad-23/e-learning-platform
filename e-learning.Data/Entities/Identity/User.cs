@@ -9,5 +9,6 @@ namespace e_learning.Data.Entities.Identity
         public string? Code { get; set; }
         [InverseProperty(nameof(UserRefreshToken.user))]
         public virtual ICollection<UserRefreshToken> userRefreshToken { get; set; }
+        public virtual Instructor Instructor { get; set; }
     }
 }

@@ -32,6 +32,10 @@ namespace e_learning.Services.Implementations
         {
             return await _repository.GetByIdAsync(id);
         }
+        public async Task<Instructor?> GetInstructorByEmailAsync(string email)
+        {
+            return await _repository.GetByEmailAsync(email);
+        }
 
         public async Task<bool> UpdateInstructorAsync(int id, Instructor updatedInstructor, IFormFile ImageUrl)
         {

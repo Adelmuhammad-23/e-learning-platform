@@ -21,12 +21,10 @@ namespace e_learning.Core.Features.Courses.Commands.Validatiors
                 .NotEmpty()
                 .NotNull();
 
-            RuleFor(x => x.InstructorId)
+            RuleFor(x => x.InstructorEmail)
                 .NotEmpty()
                 .NotNull();
-            RuleFor(x => x.InstructorId)
-               .NotEmpty()
-                .NotNull();
+
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .NotNull();
