@@ -1,10 +1,12 @@
 ﻿using e_learning.Data.Entities;
+using e_learning.Data.Entities.Identity;
 using e_learning.Data.Entities.Views;
 using e_learning.infrastructure.Repositories;
 using e_learning.infrastructure.Repositories.Views;
 using e_learning.Services.Abstructs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace e_learning.Services.Implementations
@@ -13,6 +15,8 @@ namespace e_learning.Services.Implementations
     {
         #region Fields
         private readonly ICourseRepository _courseRepository;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly ITopPricedCoursesView<TopPricedCourses> _topPricedCourses;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _webHost;
@@ -21,9 +25,11 @@ namespace e_learning.Services.Implementations
         #endregion
 
         #region Constructors
-        public CourseServices(ICourseRepository courseRepository, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost, ITopPricedCoursesView<TopPricedCourses> topPricedCourses)
+        public CourseServices(ICourseRepository courseRepository, RoleManager<Role> roleManager, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost, ITopPricedCoursesView<TopPricedCourses> topPricedCourses)
         {
             _courseRepository = courseRepository;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _topPricedCourses = topPricedCourses;
             _httpContextAccessor = httpContextAccessor;
             _webHost = webHost;
@@ -37,7 +43,13 @@ namespace e_learning.Services.Implementations
         {
             var request = _httpContextAccessor.HttpContext?.Request;
             if (request == null) return "Failed to get request context";
-
+            var instructorUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == course.InstructorId);
+            if (instructorUser == null)
+                return "InstructorNotFound";
+            var role = await _userManager.GetRolesAsync(instructorUser);
+            var instructorRole = role.FirstOrDefault();
+            if (instructorRole != "Instructor")
+                return "NotAuthorized";
             var webRootPath = _webHost.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             var uploadsFolder = Path.Combine(webRootPath, "uploads", "images");
 
@@ -59,6 +71,14 @@ namespace e_learning.Services.Implementations
 
             return "Success";
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            var couersse = await _courseRepository.ExistsAsync(id);
+            if (!couersse) return false;
+            return couersse;
+        }
+
         public async Task<List<Course>> GetAllCoursesAsync()
         {
             return await _courseRepository.GetAllCoursesAsync();

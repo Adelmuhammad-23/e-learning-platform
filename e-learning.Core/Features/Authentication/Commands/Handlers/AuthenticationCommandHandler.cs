@@ -87,8 +87,11 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                         Bio = "Please enter your Bio",
                         Image = null
                     };
-
                     await _instructorService.AddInstructorAsync(instructor);
+                }
+                else if (request.RoleName.Equals("Student", StringComparison.InvariantCultureIgnoreCase))
+                {
+
                 }
                 await _authenticationService.SaveChangesAsync();
                 await _authenticationService.CommitAsync();
