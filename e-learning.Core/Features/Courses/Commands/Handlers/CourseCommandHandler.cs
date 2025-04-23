@@ -29,6 +29,9 @@ namespace e_learning.Core.Features.Courses.Commands.Handlers
             var courseResult = await _courseServices.AddCourse(courseMapping, request.Image);
             switch (courseResult)
             {
+                case "Failed to get request context":
+                    return BadRequest<string>("Failed to get request context");
+
                 case "Not Authorized because Instructor Not Found":
                     return Unauthorized<string>("Not Authorized because Instructor Not Found");
                 case "Success":

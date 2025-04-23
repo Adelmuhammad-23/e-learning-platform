@@ -32,6 +32,13 @@ namespace e_learning.infrastructure.Implementation
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public async Task<Instructor?> GetByEmailAsync(string Email)
+        {
+            return await _context.instructors
+                .FirstOrDefaultAsync(i => i.Email == Email);
+        }
+
+
 
 
         public async Task UpdateAsync(Instructor instructor)

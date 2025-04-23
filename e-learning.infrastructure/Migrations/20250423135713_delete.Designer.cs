@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using e_learning.infrastructure.Context;
 
@@ -11,9 +12,11 @@ using e_learning.infrastructure.Context;
 namespace e_learning.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423135713_delete")]
+    partial class delete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,10 +164,6 @@ namespace e_learning.infrastructure.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstructorEmail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InstructorId")
@@ -360,13 +359,7 @@ namespace e_learning.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("instructors");
                 });
@@ -597,17 +590,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("e_learning.Data.Entities.Instructor", b =>
-                {
-                    b.HasOne("e_learning.Data.Entities.Identity.User", "User")
-                        .WithOne("Instructor")
-                        .HasForeignKey("e_learning.Data.Entities.Instructor", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("e_learning.Data.Entities.Module", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Course", "Course")
@@ -663,9 +645,6 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Identity.User", b =>
                 {
-                    b.Navigation("Instructor")
-                        .IsRequired();
-
                     b.Navigation("userRefreshToken");
                 });
 
