@@ -29,10 +29,8 @@ namespace e_learning.Core.Features.Courses.Commands.Handlers
             var courseResult = await _courseServices.AddCourse(courseMapping, request.Image);
             switch (courseResult)
             {
-                case "NotAuthorized":
-                    return Unauthorized<string>("Not Authorized");
-                case "InstructorNotFound":
-                    return NotFound<string>("Instructor Not Found");
+                case "Not Authorized because Instructor Not Found":
+                    return Unauthorized<string>("Not Authorized because Instructor Not Found");
                 case "Success":
                     return Success("Success");
                 default:

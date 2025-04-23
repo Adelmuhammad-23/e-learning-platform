@@ -7,7 +7,6 @@
         public string? Image { get; set; }
         public string Email { get; set; }
         public string Bio { get; set; }
-
         // Navigation Property
         public List<Course> Courses { get; set; } = new();
     }
