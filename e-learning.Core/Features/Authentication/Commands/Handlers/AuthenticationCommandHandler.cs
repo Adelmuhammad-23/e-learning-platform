@@ -82,6 +82,7 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                 {
                     var instructor = new Instructor
                     {
+                        UserId = user.Id,
                         Name = request.UserName,
                         Email = request.Email,
                         Bio = "Please enter your Bio",
