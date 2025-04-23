@@ -23,12 +23,14 @@ namespace e_learning.Services.Implementations
         private readonly UserManager<User> _userManager;
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
         private readonly IEmailServices _emailServices;
+        private readonly IInstructorRepository _instructorRepository;
         private readonly ApplicationDbContext _dbContext;
 
         #endregion
 
         #region Constructors
         public AuthenticationServices(JwtSettings jwtSettings,
+             IInstructorRepository instructorRepository,
                                      IUserRefreshTokenRepository userRefreshTokenRepository,
                                      UserManager<User> userManager,
                                      IUserRefreshTokenRepository refreshTokenRepository,
@@ -36,6 +38,7 @@ namespace e_learning.Services.Implementations
                                      ApplicationDbContext dbContext)
         {
             _jwtSettings = jwtSettings;
+            _instructorRepository = instructorRepository;
             _userRefreshTokenRepository = userRefreshTokenRepository;
             _userRefreshToken = new ConcurrentDictionary<string, RefreshToken>();
             _userManager = userManager;
@@ -134,18 +137,25 @@ namespace e_learning.Services.Implementations
         public async Task<List<Claim>> GetClaims(User user)
         {
             var roles = await _userManager.GetRolesAsync(user);
+            var instructor = await _instructorRepository.GetByEmailAsync(user.Email);
 
             var claims = new List<Claim>()
             {
                 new Claim(nameof(UserClaimModel.UserName), user.UserName),
-                new Claim(nameof(UserClaimModel.Email), user.Email),
                 new Claim(nameof(UserClaimModel.Id), user.Id.ToString()),
+
+                new Claim(nameof(UserClaimModel.Email), user.Email),
+
                 new Claim(ClaimTypes.NameIdentifier,user.UserName)
-
-
             };
+
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
+            if (instructor != null)
+            {
+                var claim = new Claim(nameof(UserClaimModel.instructorId), instructor.Id.ToString());
+                claims.Add(claim);
+            }
             var userClaims = await _userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
             return claims;
