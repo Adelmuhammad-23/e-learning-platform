@@ -2,8 +2,10 @@
 using e_learning.Core.Bases;
 using e_learning.Core.Features.Instructors.Queries.Models;
 using e_learning.Core.Features.Instructors.Queries.Responses;
+using e_learning.Data.Entities.Identity;
 using e_learning.Services.Abstructs;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace e_learning.Core.Features.Instructors.Queries.Handlers
 {
@@ -12,6 +14,8 @@ namespace e_learning.Core.Features.Instructors.Queries.Handlers
         IRequestHandler<GetInstructorByIdQuery, Responses<InstructorQueryResponse>>
     {
         private readonly IInstructorService _instructorService;
+        private readonly UserManager<User> _userManager;
+
         private readonly IMapper _mapper;
 
         public InstructorQueryHandler(IInstructorService instructorService, IMapper mapper)
