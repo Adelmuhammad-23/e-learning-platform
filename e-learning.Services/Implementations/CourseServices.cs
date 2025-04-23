@@ -17,7 +17,6 @@ namespace e_learning.Services.Implementations
         private readonly ICourseRepository _courseRepository;
         private readonly IInstructorRepository _instructorRepository;
         private readonly UserManager<User> _userManager;
-        private readonly IInstructorRepository _instructorRepository;
 
         private readonly RoleManager<Role> _roleManager;
         private readonly ITopPricedCoursesView<TopPricedCourses> _topPricedCourses;
