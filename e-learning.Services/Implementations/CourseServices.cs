@@ -16,6 +16,8 @@ namespace e_learning.Services.Implementations
         #region Fields
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<User> _userManager;
+        private readonly IInstructorRepository _instructorRepository;
+
         private readonly RoleManager<Role> _roleManager;
         private readonly ITopPricedCoursesView<TopPricedCourses> _topPricedCourses;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,9 +27,10 @@ namespace e_learning.Services.Implementations
         #endregion
 
         #region Constructors
-        public CourseServices(ICourseRepository courseRepository, RoleManager<Role> roleManager, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost, ITopPricedCoursesView<TopPricedCourses> topPricedCourses)
+        public CourseServices(ICourseRepository courseRepository, IInstructorRepository instructorRepository, RoleManager<Role> roleManager, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost, ITopPricedCoursesView<TopPricedCourses> topPricedCourses)
         {
             _courseRepository = courseRepository;
+            _instructorRepository = instructorRepository;
             _userManager = userManager;
             _roleManager = roleManager;
             _topPricedCourses = topPricedCourses;
@@ -43,13 +46,10 @@ namespace e_learning.Services.Implementations
         {
             var request = _httpContextAccessor.HttpContext?.Request;
             if (request == null) return "Failed to get request context";
-            var instructorUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == course.InstructorId);
-            if (instructorUser == null)
-                return "InstructorNotFound";
-            var role = await _userManager.GetRolesAsync(instructorUser);
-            var instructorRole = role.FirstOrDefault();
-            if (instructorRole != "Instructor")
-                return "NotAuthorized";
+            var instructor = await _instructorRepository.GetByIdAsync(course.InstructorId);
+            if (instructor == null)
+                return "Not Authorized because Instructor Not Found";
+
             var webRootPath = _webHost.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             var uploadsFolder = Path.Combine(webRootPath, "uploads", "images");
 
