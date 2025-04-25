@@ -22,7 +22,7 @@ namespace e_learning.API.Controllers
         public async Task<IActionResult> AddVideoToModuleAsync(AddVideoToModuleCommand moduleCommand) => NewResult(await Mediator.Send(moduleCommand));
 
         [HttpDelete("video/{id}")]
-        public async Task<IActionResult> DeleteVideoFromModuleAsync(DeleteVideoFromModuleCommand moduleCommand) => NewResult(await Mediator.Send(moduleCommand));
+        public async Task<IActionResult> DeleteVideoFromModuleAsync([FromRoute] int id) => NewResult(await Mediator.Send(new DeleteVideoFromModuleCommand(id)));
 
     }
 }
