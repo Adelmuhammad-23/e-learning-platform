@@ -4,7 +4,7 @@ using MediatR;
 
 namespace e_learning.Core.Features.Courses.Queries.Models
 {
-    public class GetCourseByInstructorId : IRequest<Responses<GetCourseResponse>>
+    public class GetCourseByInstructorId : IRequest<Responses<GetCourseResponse[]>>
     {
         public GetCourseByInstructorId(int id)
         {

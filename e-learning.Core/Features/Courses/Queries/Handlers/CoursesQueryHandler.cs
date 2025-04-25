@@ -12,7 +12,7 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
         IRequestHandler<GetAllCoursesByCategoryIdQuery, Responses<List<AllCoursesByCategoryIdResponse>>>,
         IRequestHandler<GetTopPricedCoursesQuery, Responses<List<GetTopPricedCoursesResponse>>>,
         IRequestHandler<GetCourseById, Responses<GetCourseResponse>>,
-        IRequestHandler<GetCourseByInstructorId, Responses<GetCourseResponse>>
+        IRequestHandler<GetCourseByInstructorId, Responses<GetCourseResponse[]>>
     {
         #region Fields
         private readonly ICourseServices _courseServices;
@@ -83,12 +83,12 @@ namespace e_learning.Core.Features.Courses.Queries.Handlers
             return Success(courseMapping);
         }
 
-        public async Task<Responses<GetCourseResponse>> Handle(GetCourseByInstructorId request, CancellationToken cancellationToken)
+        public async Task<Responses<GetCourseResponse[]>> Handle(GetCourseByInstructorId request, CancellationToken cancellationToken)
         {
             var course = await _courseServices.GetCourseByInstructorIdAsync(request.Id);
             if (course == null)
-                return NotFound<GetCourseResponse>($"No courses found with Instructor Id:{request.Id}");
-            var courseMapping = _mapper.Map<GetCourseResponse>(course);
+                return NotFound<GetCourseResponse[]>($"No courses found with Instructor Id:{request.Id}");
+            var courseMapping = _mapper.Map<GetCourseResponse[]>(course);
             return Success(courseMapping);
         }
         #endregion

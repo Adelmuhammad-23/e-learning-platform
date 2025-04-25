@@ -94,10 +94,10 @@ namespace e_learning.Services.Implementations
             return course;
         }
 
-        public async Task<Course> GetCourseByInstructorIdAsync(int instructorId)
+        public async Task<Course[]> GetCourseByInstructorIdAsync(int instructorId)
         {
             var course = await _courseRepository.GetCourseByInstructorIdAsync(instructorId);
-            if (course == null)
+            if (course.Length==0)
                 return null;
             return course;
         }
