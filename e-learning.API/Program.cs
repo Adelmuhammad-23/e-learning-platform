@@ -12,12 +12,14 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddCors(option => {
+builder.Services.AddCors(option =>
+{
     option.AddPolicy("allowCors", policy => { policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }
     );
 });
@@ -30,6 +32,11 @@ option.UseSqlServer(connectionString)
 );
 #endregion
 
+#region Redis 
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
+
+#endregion
 #region Serilog
 var loggingConfiguration = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
 builder.Logging.AddSerilog(loggingConfiguration);
@@ -78,7 +85,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<e_learning.Data.Entities.Identity.Role>>();
     await RoleSeeder.SeedAsync(roleManager);
     await UserSeeder.SeedAsync(userManager);
 }
