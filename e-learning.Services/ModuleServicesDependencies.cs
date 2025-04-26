@@ -17,6 +17,7 @@ namespace e_learning.Services
             services.AddTransient<IModuleService, ModuleService>();
             services.AddTransient<IInstructorService, InstructorService>();
             services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<ICartService, CartService>();
 
 
             return services;
