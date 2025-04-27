@@ -19,6 +19,7 @@ public class CartController : ControllerBase
         _courseServices = courseServices;
         _studentServices = studentServices;
         _authenticationServices = authenticationServices;
+
     }
 
     [HttpGet("{studentId}")]
@@ -27,6 +28,7 @@ public class CartController : ControllerBase
         var getStudent = await _studentServices.GetStudentAsync(studentId);
         if (getStudent == null)
             return NotFound("Student is not found !");
+
         var cart = await _cartService.GetCartAsync(studentId);
         return Ok(cart);
     }
@@ -40,6 +42,7 @@ public class CartController : ControllerBase
         var course = await _courseServices.GetCourseByIdAsync(courseId);
         if (course == null)
             return NotFound($"No course with this ID:{courseId} !");
+
 
         var accessToken = await _authenticationServices.ValidateToken(token);
         switch (accessToken)
@@ -85,4 +88,5 @@ public class CartController : ControllerBase
 
 
 }
+
 
