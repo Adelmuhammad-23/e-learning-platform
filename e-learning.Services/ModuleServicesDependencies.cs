@@ -18,6 +18,7 @@ namespace e_learning.Services
             services.AddTransient<IInstructorService, InstructorService>();
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<ICartService, CartService>();
+            services.AddTransient<IStudentServices, StudentServices>();
 
 
             return services;
