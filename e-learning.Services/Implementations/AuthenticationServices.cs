@@ -24,6 +24,7 @@ namespace e_learning.Services.Implementations
         private readonly IUserRefreshTokenRepository _refreshTokenRepository;
         private readonly IEmailServices _emailServices;
         private readonly IInstructorRepository _instructorRepository;
+        private readonly IStudentRepository _studentRepository;
         private readonly ApplicationDbContext _dbContext;
 
         #endregion
@@ -31,6 +32,7 @@ namespace e_learning.Services.Implementations
         #region Constructors
         public AuthenticationServices(JwtSettings jwtSettings,
              IInstructorRepository instructorRepository,
+             IStudentRepository studentRepository,
                                      IUserRefreshTokenRepository userRefreshTokenRepository,
                                      UserManager<User> userManager,
                                      IUserRefreshTokenRepository refreshTokenRepository,
@@ -39,6 +41,7 @@ namespace e_learning.Services.Implementations
         {
             _jwtSettings = jwtSettings;
             _instructorRepository = instructorRepository;
+            _studentRepository = studentRepository;
             _userRefreshTokenRepository = userRefreshTokenRepository;
             _userRefreshToken = new ConcurrentDictionary<string, RefreshToken>();
             _userManager = userManager;
@@ -138,6 +141,7 @@ namespace e_learning.Services.Implementations
         {
             var roles = await _userManager.GetRolesAsync(user);
             var instructor = await _instructorRepository.GetByEmailAsync(user.Email);
+            var student = await _studentRepository.GetByEmailAsync(user.Email);
 
             var claims = new List<Claim>()
             {
@@ -154,6 +158,11 @@ namespace e_learning.Services.Implementations
             if (instructor != null)
             {
                 var claim = new Claim(nameof(UserClaimModel.instructorId), instructor.Id.ToString());
+                claims.Add(claim);
+            }
+            if (student != null)
+            {
+                var claim = new Claim(nameof(UserClaimModel.studentId), student.Id.ToString());
                 claims.Add(claim);
             }
             var userClaims = await _userManager.GetClaimsAsync(user);

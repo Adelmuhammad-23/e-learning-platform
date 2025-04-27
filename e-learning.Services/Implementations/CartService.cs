@@ -8,10 +8,13 @@ namespace e_learning.Services.Implementations
     {
         private readonly ICartRepository _cartRepository;
         private readonly ICourseRepository _courseRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public CartService(ICartRepository cartRepository, ICourseRepository courseRepository)
+        public CartService(ICartRepository cartRepository, IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             _cartRepository = cartRepository;
+            _studentRepository = studentRepository;
+
             _courseRepository = courseRepository;
         }
 
@@ -30,8 +33,11 @@ namespace e_learning.Services.Implementations
                 var course = await _courseRepository.GetCourseByIdAsync(courseId);
                 var newCartItem = new CartItemDto
                 {
+
+                    CourseId = course.Id,
                     CourseTitle = course.Title,
-                    Price = course.Price,
+                    Price = course.Price
+
                 };
                 cart.Courses.Add(newCartItem);
                 await _cartRepository.SaveCartAsync(cart);

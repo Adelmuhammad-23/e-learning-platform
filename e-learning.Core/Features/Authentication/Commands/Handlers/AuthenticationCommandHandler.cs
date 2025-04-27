@@ -29,6 +29,7 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
         private readonly IEmailServices _emailServices;
         private readonly IInstructorService _instructorService;
         private readonly IAuthenticationServices _authenticationService;
+        private readonly IStudentServices _studentServices;
         private readonly IMapper _mapper;
         #endregion
 
@@ -41,7 +42,8 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                                             SignInManager<User> signInManager,
                                             IMapper mapper,
                                             IAuthenticationServices authenticationService,
-                                            IInstructorService instructorService)
+                                            IInstructorService instructorService,
+                                            IStudentServices studentServices)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -52,7 +54,7 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
             _urlHelper = urlHelper;
             _emailServices = emailServices;
             _instructorService = instructorService;
-
+            _studentServices = studentServices;
         }
         #endregion
         #region Handel Functions
@@ -92,7 +94,13 @@ namespace e_learning.Core.Features.Authentication.Commands.Handlers
                 }
                 else if (request.RoleName.Equals("Student", StringComparison.InvariantCultureIgnoreCase))
                 {
-
+                    var student = new Student
+                    {
+                        Name = request.UserName,
+                        Email = request.Email,
+                        Image = null
+                    };
+                    await _studentServices.AddStudentAsync(student);
                 }
                 await _authenticationService.SaveChangesAsync();
                 await _authenticationService.CommitAsync();
