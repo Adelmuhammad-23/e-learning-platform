@@ -22,6 +22,7 @@ namespace e_learning.infrastructure
             services.AddTransient<ICartRepository, CartRepository>();
             services.AddTransient<IStudentRepository, StudentRepository>();
 
+
             return services;
 
         }

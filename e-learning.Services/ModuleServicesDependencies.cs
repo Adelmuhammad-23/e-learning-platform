@@ -21,6 +21,7 @@ namespace e_learning.Services
             services.AddTransient<IStudentServices, StudentServices>();
 
 
+
             return services;
 
         }

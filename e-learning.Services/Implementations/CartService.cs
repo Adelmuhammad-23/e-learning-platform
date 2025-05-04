@@ -14,6 +14,7 @@ namespace e_learning.Services.Implementations
         {
             _cartRepository = cartRepository;
             _studentRepository = studentRepository;
+
             _courseRepository = courseRepository;
         }
 
@@ -36,6 +37,7 @@ namespace e_learning.Services.Implementations
                     CourseId = course.Id,
                     CourseTitle = course.Title,
                     Price = course.Price
+
                 };
                 cart.Courses.Add(newCartItem);
                 await _cartRepository.SaveCartAsync(cart);
