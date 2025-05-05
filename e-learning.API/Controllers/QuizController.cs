@@ -1,0 +1,64 @@
+﻿using e_learning.Data.Helpers;
+using e_learning.Services.Implementations;
+using Microsoft.AspNetCore.Mvc;
+
+namespace e_learning.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class QuizController : ControllerBase
+    {
+        private readonly QuizService _quizService;
+
+        public QuizController(QuizService quizService)
+        {
+            _quizService = quizService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _quizService.GetAllAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var result = await _quizService.GetByIdAsync(id);
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateQuizDto quiz)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _quizService.AddAsync(quiz);
+            return Ok(new { message = "Quiz created successfully." });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] CreateQuizDto quiz)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _quizService.UpdateAsync(id, quiz);
+            switch (result)
+            {
+                case "Course not found":
+                    return NotFound("Course not found");
+                case "Module not found":
+                    return NotFound("Module not found");
+                case "Quiz not found":
+                    return NotFound("Quiz not found");
+                case "Course updated is successfully":
+                    return Ok(new { message = "Quiz updated successfully." });
+                default:
+                    return BadRequest(result);
+            }
+        }
+        [HttpDelete("{id}")] public async Task<IActionResult> Delete(int id) { await _quizService.DeleteAsync(id); return Ok(); }
+    }
+}
