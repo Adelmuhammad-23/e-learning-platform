@@ -74,6 +74,12 @@ namespace e_learning.Services.Implementations
             return "Success";
         }
 
+        public async Task<string> DeleteCourseAsync(int courseId)
+        {
+            var courseDeleted = await _courseRepository.DeleteCourseAsync(courseId);
+            return courseDeleted;
+        }
+
         public async Task<bool> ExistsAsync(int id)
         {
             var couersse = await _courseRepository.ExistsAsync(id);
@@ -97,7 +103,7 @@ namespace e_learning.Services.Implementations
         public async Task<Course[]> GetCourseByInstructorIdAsync(int instructorId)
         {
             var course = await _courseRepository.GetCourseByInstructorIdAsync(instructorId);
-            if (course.Length==0)
+            if (course.Length == 0)
                 return null;
             return course;
         }

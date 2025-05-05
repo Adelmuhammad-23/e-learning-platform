@@ -8,7 +8,8 @@ using MediatR;
 namespace e_learning.Core.Features.Courses.Commands.Handlers
 {
     public class CourseCommandHandler : ResponsesHandler,
-        IRequestHandler<AddCourseCommand, Responses<string>>
+        IRequestHandler<AddCourseCommand, Responses<string>>,
+        IRequestHandler<DeleteCourseCommand, Responses<string>>
     {
         #region Fields
         private readonly ICourseServices _courseServices;
@@ -39,6 +40,17 @@ namespace e_learning.Core.Features.Courses.Commands.Handlers
                 default:
                     return BadRequest<string>("Failed to add course");
             }
+        }
+
+        public async Task<Responses<string>> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
+        {
+            var course = await _courseServices.GetCourseByIdAsync(request.Id);
+            if (course == null)
+                return NotFound<string>("Course not found");
+            var courseDeleted = await _courseServices.DeleteCourseAsync(request.Id);
+            if (courseDeleted == "Deleted")
+                return Success("Deleted is successfully");
+            return BadRequest<string>("Error when delete this course");
         }
         #endregion
     }
