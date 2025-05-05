@@ -25,5 +25,8 @@ namespace e_learning.API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddCourse([FromForm] AddCourseCommand courseCommand) => NewResult(await Mediator.Send(courseCommand));
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int id) => NewResult(await Mediator.Send(new DeleteCourseCommand(id)));
+
     }
 }

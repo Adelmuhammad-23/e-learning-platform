@@ -58,6 +58,18 @@ namespace e_learning.infrastructure.Implementation
             var course = await _context.courses.Include(m => m.Modules).AsNoTracking().Where(c => c.InstructorId == instructorId).ToArrayAsync();
             return course;
         }
+
+        public async Task<string> DeleteCourseAsync(int courseId)
+        {
+            var course = await GetCourseByIdAsync(courseId);
+            if (course != null)
+            {
+                _context.courses.Remove(course);
+                await _context.SaveChangesAsync();
+                return "Deleted";
+            }
+            return null;
+        }
         #endregion
 
     }
