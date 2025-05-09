@@ -1,11 +1,14 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Categories.Queries.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class CategoriesController : AppControllerBase
     {
         [HttpGet()]

@@ -1,12 +1,15 @@
 ﻿using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 using e_learning.Services.Implementations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize()]
+
     public class PaymentController : ControllerBase
     {
         private readonly ICartService _cartService;
