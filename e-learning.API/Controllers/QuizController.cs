@@ -28,6 +28,9 @@ namespace e_learning.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
+            var existingQuiz = await _quizService.GetByIdAsync(id);
+            if (existingQuiz == null)
+                return NotFound("Quiz not found");
             var result = await _quizService.GetByIdAsync(id);
             return Ok(result);
         }
@@ -36,9 +39,18 @@ namespace e_learning.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            await _quizService.AddAsync(quiz);
-            return Ok(new { message = "Quiz created successfully." });
+            var result = await _quizService.AddAsync(quiz);
+            switch (result)
+            {
+                case "Course not found":
+                    return NotFound("Course not found");
+                case "Module not found":
+                    return NotFound("Module not found");
+                case "Course updated is successfully":
+                    return Ok(new { message = "Quiz created successfully." });
+                default:
+                    return BadRequest(result);
+            }
         }
 
         [HttpPut("{id}")]
@@ -62,6 +74,13 @@ namespace e_learning.API.Controllers
                     return BadRequest(result);
             }
         }
-        [HttpDelete("{id}")] public async Task<IActionResult> Delete(int id) { await _quizService.DeleteAsync(id); return Ok(); }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var existingQuiz = await _quizService.GetByIdAsync(id);
+            if (existingQuiz == null)
+                return NotFound("Quiz not found");
+            await _quizService.DeleteAsync(id); return Ok();
+        }
     }
 }
