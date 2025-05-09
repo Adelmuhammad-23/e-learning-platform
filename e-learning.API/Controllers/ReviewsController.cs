@@ -1,18 +1,42 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Review.Commands.Models;
 using e_learning.Core.Features.Review.Queries.Models;
-
+using e_learning.Services.Abstructs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize()]
+
     public class ReviewsController : AppControllerBase
     {
+        private readonly IAuthenticationServices _authenticationServices;
+
+        public ReviewsController(IAuthenticationServices authenticationServices)
+        {
+            _authenticationServices = authenticationServices;
+        }
 
         [HttpPost]
-        public async Task<IActionResult> AddModuleAsync(AddReviewCommand reviewCommand) => NewResult(await Mediator.Send(reviewCommand));
+        public async Task<IActionResult> AddModuleAsync([FromHeader] string Token, AddReviewCommand reviewCommand)
+        {
+            var token = await _authenticationServices.ValidateToken(Token);
+            switch (token)
+            {
+                case "InvalidToken":
+                    return Unauthorized("Token is not valid");
+                case "NotExpired":
+                    {
+                        return NewResult(await Mediator.Send(reviewCommand));
+
+                    }
+                default:
+                    return BadRequest("error when check token is valid or not");
+            }
+        }
 
 
         [HttpGet("course/{courseId}")]
@@ -24,9 +48,20 @@ namespace e_learning.API.Controllers
             NewResult(await Mediator.Send(new GetReviewByIdQuery(reviewId)));
 
         [HttpPut()]
-        public async Task<IActionResult> UpdateReviewAsync([FromBody] UpdateReviewCommand command)
+        public async Task<IActionResult> UpdateReviewAsync([FromHeader] string Token, [FromBody] UpdateReviewCommand command)
         {
-            return NewResult(await Mediator.Send(command));
+            var token = await _authenticationServices.ValidateToken(Token);
+            switch (token)
+            {
+                case "InvalidToken":
+                    return Unauthorized("Token is not valid");
+                case "NotExpired":
+                    {
+                        return NewResult(await Mediator.Send(command));
+                    }
+                default:
+                    return BadRequest("Error validating token");
+            }
         }
 
 

@@ -1,8 +1,10 @@
 ﻿using e_learning.Services.Abstructs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CartController : ControllerBase
 {
     private readonly ICartService _cartService;

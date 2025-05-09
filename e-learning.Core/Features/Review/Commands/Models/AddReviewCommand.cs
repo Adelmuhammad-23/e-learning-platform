@@ -5,7 +5,6 @@ namespace e_learning.Core.Features.Review.Commands.Models
 {
     public class AddReviewCommand : IRequest<Responses<string>>
     {
-        public string Token { get; set; }
         public int StudentId { get; set; }
         public int CourseId { get; set; }
         public string Comment { get; set; }

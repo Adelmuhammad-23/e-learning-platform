@@ -1,12 +1,15 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Modules.Commands.Models;
 using e_learning.Core.Features.Modules.Queries.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize()]
+
     public class ModulesController : AppControllerBase
     {
         [HttpGet("Course/{id}")]

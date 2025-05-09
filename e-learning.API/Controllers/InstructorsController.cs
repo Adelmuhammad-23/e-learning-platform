@@ -1,15 +1,20 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Instructors.Commands.Models;
 using e_learning.Core.Features.Instructors.Queries.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Instructor")]
+
     public class InstructorsController : AppControllerBase
     {
         [HttpGet]
+        [Authorize(Roles = "Instructor,Student")]
+
         public async Task<IActionResult> GetAllInstructorsAsync() =>
            NewResult(await Mediator.Send(new GetAllInstructorsQuery()));
 

@@ -1,11 +1,14 @@
 ﻿using e_learning.Data.Helpers;
 using e_learning.Services.Implementations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize()]
+
     public class QuizController : ControllerBase
     {
         private readonly QuizService _quizService;
