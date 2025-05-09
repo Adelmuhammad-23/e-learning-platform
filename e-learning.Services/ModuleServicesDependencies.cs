@@ -19,6 +19,7 @@ namespace e_learning.Services
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IStudentServices, StudentServices>();
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddTransient<QuizService>();
             services.AddTransient<QuestionService>();
             services.AddTransient<ChoiceService>();

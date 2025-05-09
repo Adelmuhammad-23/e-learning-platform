@@ -6,6 +6,7 @@ using e_learning.infrastructure;
 using e_learning.infrastructure.Context;
 using e_learning.infrastructure.Seeder;
 using e_learning.Services;
+using e_learning.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -58,6 +59,7 @@ builder.Services.AddCoreDependencis()
                 .AddServicesDependencis()
                 .AddInfrastructureDependencis()
                 .AddServiceRegistrationDependencis(builder.Configuration);
+builder.Services.AddHttpClient<PayPalService>();
 
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddHttpContextAccessor();

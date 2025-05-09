@@ -55,7 +55,7 @@ public class CartController : ControllerBase
                     return Ok(cart);
                 }
             default:
-                return BadRequest("Expired token");
+                return BadRequest("Expired token or another reason to failed in this token ");
         }
     }
 
@@ -73,7 +73,12 @@ public class CartController : ControllerBase
     }
 
 
-
+    [HttpPost("checkout")]
+    public async Task<IActionResult> Checkout([FromQuery] int studentId)
+    {
+        var url = await _cartService.CheckoutAsync(studentId);
+        return Ok(new { Url = url });
+    }
 
 
 
