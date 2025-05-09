@@ -26,6 +26,7 @@ namespace e_learning.infrastructure.Context
         public DbSet<Question> Questions { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<TopPricedCourses> TopPricedCourses { get; set; }
         public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
     }
