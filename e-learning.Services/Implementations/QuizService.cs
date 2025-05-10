@@ -36,6 +36,10 @@ namespace e_learning.Services.Implementations
             var existingCourse = await _courseServices.GetCourseByIdAsync(quiz.CourseId);
             if (existingCourse == null)
                 return ("Course not found");
+            var existingModule = await _moduleService.GetModuleByIdAsync(quiz.ModuleId);
+            if (existingCourse == null)
+                return ("Module not found");
+
             var mappedQuiz = _mapper.Map<Quiz>(quiz);
             await _quizRepository.AddAsync(mappedQuiz);
             return ("Course Added is successfully");

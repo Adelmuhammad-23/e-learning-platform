@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using e_learning.infrastructure.Context;
 
@@ -11,9 +12,11 @@ using e_learning.infrastructure.Context;
 namespace e_learning.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250509153033_addEnrollmentTable")]
+    partial class addEnrollmentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -486,8 +489,6 @@ namespace e_learning.infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModuleId");
-
                     b.ToTable("Quizzes");
                 });
 
@@ -758,17 +759,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("e_learning.Data.Entities.Quiz", b =>
-                {
-                    b.HasOne("e_learning.Data.Entities.Module", "Module")
-                        .WithMany("Quizzes")
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Module");
-                });
-
             modelBuilder.Entity("e_learning.Data.Entities.Reviews", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Course", "Course")
@@ -828,8 +818,6 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Module", b =>
                 {
-                    b.Navigation("Quizzes");
-
                     b.Navigation("Videos");
                 });
 

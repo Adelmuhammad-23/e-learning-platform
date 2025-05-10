@@ -53,7 +53,7 @@ namespace e_learning.Services.Implementations
             course.InstructorId = inst.Id;
 
             var webRootPath = _webHost.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            var uploadsFolder = Path.Combine(webRootPath, "uploads", "images");
+            var uploadsFolder = Path.Combine(webRootPath, "uploads", "images", "CourseImages");
 
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
@@ -66,7 +66,7 @@ namespace e_learning.Services.Implementations
                 await videoFile.CopyToAsync(stream);
             }
 
-            var fileUrl = $"{request.Scheme}://{request.Host}/uploads/images/{uniqueFileName}";
+            var fileUrl = $"{request.Scheme}://{request.Host}/uploads/images/CourseImages/{uniqueFileName}";
 
             course.Image = fileUrl;
             await _courseRepository.AddCourse(course);

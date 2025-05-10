@@ -19,6 +19,7 @@
 
         public Category Category { get; set; }
         public List<Reviews> Reviews { get; set; } = new();
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 
     }
 

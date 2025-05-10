@@ -41,6 +41,16 @@ public class CartRepository : ICartRepository
         var data = JsonSerializer.Serialize(cart);
         await _database.StringSetAsync(GetCartKey(cart.StudentId), data, TimeSpan.FromDays(1));
     }
+    public async Task<CartDto> GetCartByIdAsync(Guid cartId)
+    {
+        // استرجاع الكارت من Redis باستخدام cartId
+        var cartData = await _database.StringGetAsync(cartId.ToString());
+        if (string.IsNullOrEmpty(cartData))
+            return null;
+
+        // تحويل الـ JSON المخزن في Redis إلى كائن CartDto
+        return Newtonsoft.Json.JsonConvert.DeserializeObject<CartDto>(cartData);
+    }
 
     public async Task DeleteCartAsync(int studentId)
     {

@@ -9,13 +9,27 @@ namespace e_learning.Services.Implementations
         private readonly ICartRepository _cartRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IStudentRepository _studentRepository;
-
-        public CartService(ICartRepository cartRepository, IStudentRepository studentRepository, ICourseRepository courseRepository)
+        private readonly PayPalService _payPalService;
+        private readonly IEnrollmentService _enrollmentService;
+        public CartService(ICartRepository cartRepository, IStudentRepository studentRepository, ICourseRepository courseRepository, PayPalService payPalService, IEnrollmentService enrollmentService)
         {
             _cartRepository = cartRepository;
             _studentRepository = studentRepository;
 
             _courseRepository = courseRepository;
+            _payPalService = payPalService;
+            _enrollmentService = enrollmentService;
+        }
+        public async Task<string> CheckoutAsync(int studentId)
+        {
+            var cart = await _cartRepository.GetCartAsync(studentId);
+            if (cart == null || !cart.Courses.Any())
+                throw new Exception("Cart is empty");
+
+            var total = cart.Courses.Sum(c => c.Price);
+            var approvalUrl = await _payPalService.CreateOrderAsync(total, studentId);
+
+            return approvalUrl;
         }
 
         public async Task<CartDto> AddToCartAsync(int studentId, int courseId)
@@ -50,6 +64,23 @@ namespace e_learning.Services.Implementations
         {
             return await _cartRepository.GetCartAsync(studentId);
         }
+        public async Task<string> CheckoutByCartIdAsync(int studentId, Guid cartId)
+        {
+            var cart = await _cartRepository.GetCartByIdAsync(cartId);
+            if (cart == null || cart.StudentId != studentId)
+                throw new Exception("Invalid cart");
+
+            var total = cart.Courses.Sum(c => c.Price);
+
+            foreach (var course in cart.Courses)
+            {
+                await _enrollmentService.EnrollStudentInCourseAsync(studentId, course.CourseId);
+            }
+
+            var approvalUrl = await _payPalService.CreateOrderAsync(total, studentId);
+            return approvalUrl;
+        }
+
 
         public async Task RemoveFromCartAsync(int studentId, int courseId)
         {

@@ -8,5 +8,6 @@ namespace e_learning.infrastructure.Repositories
 
         Task<Student> GetStudentAsync(int studentId);
         Task<string> AddStudentAsync(Student student);
+        Task<string> UpdateStudentAsync(Student student);
     }
 }

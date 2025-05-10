@@ -24,6 +24,7 @@ namespace e_learning.infrastructure
             services.AddTransient<IQuizRepository, QuizRepository>();
             services.AddTransient<IQuestionRepository, QuestionRepository>();
             services.AddTransient<IChoiceRepository, ChoiceRepository>();
+            services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 
 
             return services;
