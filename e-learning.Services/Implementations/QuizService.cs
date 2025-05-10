@@ -20,17 +20,16 @@ namespace e_learning.Services.Implementations
             _mapper = mapper;
             _moduleService = moduleService;
         }
-
         public async Task<List<QuizWithQuestionsDto>> GetAllAsync()
         {
             var quizzes = await _quizRepository.GetAllAsync();
             return _mapper.Map<List<QuizWithQuestionsDto>>(quizzes);
         }
 
-        public async Task<QuizWithQuestionsDto> GetByIdAsync(int id)
+        public async Task<CreateQuizDto> GetByIdAsync(int id)
         {
             var quiz = await _quizRepository.GetByIdAsync(id);
-            return _mapper.Map<QuizWithQuestionsDto>(quiz);
+            return _mapper.Map<CreateQuizDto>(quiz);
         }
         public async Task<string> AddAsync(CreateQuizDto quiz)
         {

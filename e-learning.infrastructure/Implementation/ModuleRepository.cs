@@ -31,6 +31,7 @@ namespace e_learning.infrastructure.Implementation
             var moduls = await _context.Modules
                 .Where(m => m.CourseId == courseId)
                 .Include(m => m.Videos)
+                .Include(m => m.Quizzes)
                 .ToListAsync();
             return moduls;
         }

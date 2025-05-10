@@ -8,8 +8,10 @@ namespace e_learning.Core.Mapping.ModuleMapping
         public void GetByCourseIdMapping()
         {
             CreateMap<Module, GetByCourseIdResponse>()
-                .ForMember(dest => dest.Videos, src => src.MapFrom(v => v.Videos));
+                .ForMember(dest => dest.Videos, src => src.MapFrom(v => v.Videos))
+                .ForMember(dest => dest.Quizzes, src => src.MapFrom(v => v.Quizzes));
 
+            CreateMap<Quiz, ListOfQuizzesDto>();
             CreateMap<Video, ListOfVideos>();
 
         }

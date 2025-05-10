@@ -9,5 +9,7 @@
         // Navigation Properties
         public Course Course { get; set; }
         public List<Video> Videos { get; set; } = new();
+
+        public List<Quiz> Quizzes { get; set; } = new();
     }
 }

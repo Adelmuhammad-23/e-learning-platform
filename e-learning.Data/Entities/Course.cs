@@ -16,6 +16,7 @@
 
         // Navigation Properties
         public List<Module> Modules { get; set; } = new();
+
         public Category Category { get; set; }
         public List<Reviews> Reviews { get; set; } = new();
 

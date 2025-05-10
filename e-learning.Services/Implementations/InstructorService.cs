@@ -50,19 +50,20 @@ namespace e_learning.Services.Implementations
 
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
-
-            var uniqueFileName = $"{Guid.NewGuid().ToString().Substring(0, 5)}{Path.GetExtension(ImageUrl.FileName)}";
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            if (updatedInstructor.Image != null)
             {
-                await ImageUrl.CopyToAsync(stream);
+                var uniqueFileName = $"{Guid.NewGuid().ToString().Substring(0, 5)}{Path.GetExtension(ImageUrl.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ImageUrl.CopyToAsync(stream);
+                }
+
+                var fileUrl = $"{request.Scheme}://{request.Host}/uploads/images/instructors/{uniqueFileName}";
+
+                updatedInstructor.Image = fileUrl;
             }
-
-            var fileUrl = $"{request.Scheme}://{request.Host}/uploads/images/instructors/{uniqueFileName}";
-
-            updatedInstructor.Image = fileUrl;
-
             existing.Name = updatedInstructor.Name;
             existing.Email = updatedInstructor.Email;
             existing.Image = updatedInstructor.Image;
