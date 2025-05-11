@@ -8,7 +8,6 @@ namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize()]
 
     public class PaymentController : ControllerBase
     {
@@ -37,7 +36,7 @@ namespace e_learning.API.Controllers
         [HttpGet("paypal/success")]
         public async Task<IActionResult> Success([FromQuery] string token, [FromQuery] int studentId)
         {
-            var isCaptured = await _payPalService.CaptureOrderAsync(token);
+            var isCaptured = await _payPalService.CaptureOrderIfApprovedAsync(token);
             if (!isCaptured)
                 return BadRequest("Payment failed");
 
@@ -50,7 +49,7 @@ namespace e_learning.API.Controllers
                 }
                 await _cartRepository.GetCartAsync(studentId);
             }
-
+            await _cartRepository.DeleteCartAsync(studentId);
             return Ok("Payment completed and courses assigned.");
         }
 

@@ -1,4 +1,6 @@
-﻿namespace e_learning.Core.Features.Modules.Queries.Responses
+﻿using e_learning.Data.Entities;
+
+namespace e_learning.Core.Features.Modules.Queries.Responses
 {
     public class GetByCourseIdResponse
     {
@@ -23,5 +25,6 @@
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public int NumberOfQuestions { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace e_learning.Core.Mapping.ModuleMapping
                 .ForMember(dest => dest.Videos, src => src.MapFrom(v => v.Videos))
                 .ForMember(dest => dest.Quizzes, src => src.MapFrom(v => v.Quizzes));
 
-            CreateMap<Quiz, ListOfQuizzesDto>();
+            CreateMap<Quiz, ListOfQuizzesDto>().ForMember(dest=>dest.NumberOfQuestions, src=>src.MapFrom(m => m.Questions.Count));
             CreateMap<Video, ListOfVideos>();
 
         }

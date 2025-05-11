@@ -77,16 +77,62 @@ namespace e_learning.Services.Implementations
             return approvalLink!;
         }
 
+        public async Task<bool> IsOrderApprovedAsync(string orderId)
+        {
+            var token = await GetAccessTokenAsync();
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await _httpClient.GetAsync($"{_config["PayPal:BaseUrl"]}/v2/checkout/orders/{orderId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error checking order status: {errorBody}");
+                return false;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(content);
+            var status = doc.RootElement.GetProperty("status").GetString();
+
+            Console.WriteLine($"Order status: {status}");
+            return status == "APPROVED";
+        }
+
+
         public async Task<bool> CaptureOrderAsync(string orderId)
         {
             var token = await GetAccessTokenAsync();
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json")
+            );
 
-            var response = await _httpClient.PostAsync($"{_config["PayPal:BaseUrl"]}/v2/checkout/orders/{orderId}/capture", null);
+            var content = new StringContent("{}", Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{_config["PayPal:BaseUrl"]}/v2/checkout/orders/{orderId}/capture", content);
+
+            var body = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"PayPal capture response: {response.StatusCode}\n{body}");
+
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> CaptureOrderIfApprovedAsync(string orderId)
+        {
+            if (!await IsOrderApprovedAsync(orderId))
+            {
+                Console.WriteLine("Order is not approved yet.");
+                return false;
+            }
+
+            return await CaptureOrderAsync(orderId);
+        }
+
     }
 
 }

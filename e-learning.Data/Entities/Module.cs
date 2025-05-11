@@ -11,5 +11,6 @@
         public List<Video> Videos { get; set; } = new();
 
         public List<Quiz> Quizzes { get; set; } = new();
+
     }
 }

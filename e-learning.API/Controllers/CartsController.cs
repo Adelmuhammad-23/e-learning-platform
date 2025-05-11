@@ -14,7 +14,6 @@ public class CartController : ControllerBase
 
 
 
-
     public CartController(ICartService cartService, ICourseServices courseServices, IStudentServices studentServices, IAuthenticationServices authenticationServices)
     {
         _cartService = cartService;
@@ -35,25 +34,26 @@ public class CartController : ControllerBase
         return Ok(cart);
     }
 
-    [HttpPost("{studentId}/add")]
-    public async Task<IActionResult> AddToCart([FromHeader] string token, int studentId, int courseId)
+    [HttpPost("add/{courseId}")]
+    public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest studentId,int courseId)
     {
-        var getStudent = await _studentServices.GetStudentAsync(studentId);
+        var getStudent = await _studentServices.GetStudentAsync(studentId.StudentId);
         if (getStudent == null)
             return NotFound("Student is not found !");
         var course = await _courseServices.GetCourseByIdAsync(courseId);
         if (course == null)
             return NotFound($"No course with this ID:{courseId} !");
 
-
-        var accessToken = await _authenticationServices.ValidateToken(token);
-        switch (accessToken)
+        var accessToken = Request.Headers["Authorization"];
+        var token = accessToken.ToString().Replace("Bearer ", "");
+        var validateToken = await _authenticationServices.ValidateToken(token);
+        switch (validateToken)
         {
             case "InvalidToken":
                 return Unauthorized("Token is not valid");
             case "NotExpired":
                 {
-                    var cart = await _cartService.AddToCartAsync(studentId, courseId);
+                    var cart = await _cartService.AddToCartAsync(studentId.StudentId, courseId);
                     return Ok(cart);
                 }
             default:
@@ -71,26 +71,22 @@ public class CartController : ControllerBase
         if (course == null)
             return NotFound($"No course with this ID:{courseId} !");
         await _cartService.RemoveFromCartAsync(studentId, courseId);
-        return Ok("Delete is successfully !+");
+        return Ok(new { message = "Delete is done" });
     }
 
 
-    [HttpPost("checkout")]
-    public async Task<IActionResult> Checkout([FromQuery] int studentId)
+    [HttpPost("checkout/{studentId}")]
+    public async Task<IActionResult> Checkout(int studentId)
     {
         var url = await _cartService.CheckoutAsync(studentId);
         return Ok(new { Url = url });
     }
 
 
-
-
-
-
-
-
-
-
+    public class AddToCartRequest
+    {
+        public int StudentId { get; set; }
+    }
 
 
 

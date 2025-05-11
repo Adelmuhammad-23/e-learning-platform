@@ -46,7 +46,7 @@ namespace e_learning.API.Controllers
                     return NotFound("Course not found");
                 case "Module not found":
                     return NotFound("Module not found");
-                case "Course updated is successfully":
+                case "Course Added is successfully":
                     return Ok(new { message = "Quiz created successfully." });
                 default:
                     return BadRequest(result);

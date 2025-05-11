@@ -8,7 +8,7 @@ namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Instructor")]
+    [Authorize(Roles = "Instructor,Student")]
 
     public class InstructorsController : AppControllerBase
     {
@@ -19,6 +19,7 @@ namespace e_learning.API.Controllers
            NewResult(await Mediator.Send(new GetAllInstructorsQuery()));
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Instructor,Student")]
         public async Task<IActionResult> GetInstructorByIdAsync([FromRoute] int id) =>
             NewResult(await Mediator.Send(new GetInstructorByIdQuery(id)));
 
