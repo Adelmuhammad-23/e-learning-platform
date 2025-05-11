@@ -25,6 +25,12 @@ builder.Services.AddCors(option =>
     );
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10);
+    serverOptions.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(10);
+});
+
 
 #region Connect SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefultConnection");

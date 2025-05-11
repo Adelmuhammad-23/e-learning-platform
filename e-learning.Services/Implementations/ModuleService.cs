@@ -26,9 +26,12 @@ namespace e_learning.Services.Implementations
             var acc = new Account(
                 config.Value.CloudName,
                 config.Value.ApiKey,
-                config.Value.ApiSecret);
+                config.Value.ApiSecret
+                );
 
             _cloudinary = new Cloudinary(acc);
+            _cloudinary.Api.Timeout = 10*60*60*1000;
+            _cloudinary.Api.Client.Timeout = TimeSpan.FromMinutes(10);
         }
 
         public async Task<string> AddModuleAsync(Module module)
@@ -107,9 +110,12 @@ namespace e_learning.Services.Implementations
             return "Updated";
         }
 
-        public Task<Module> GetModuleByIdAsync(int id)
+        public async Task<Module> GetModuleByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var Module = await _moduleRepository.GetByIdAsync(id);
+            if (Module == null)
+                return null;
+            return Module;
         }
 
         public async Task<List<Module>> GetByCourseIdAsync(int courseId)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using e_learning.infrastructure.Context;
 
@@ -11,9 +12,11 @@ using e_learning.infrastructure.Context;
 namespace e_learning.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506211637_add-quizzes-to-module")]
+    partial class addquizzestomodule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,32 +215,6 @@ namespace e_learning.infrastructure.Migrations
                     b.HasIndex("InstructorId");
 
                     b.ToTable("courses");
-                });
-
-            modelBuilder.Entity("e_learning.Data.Entities.Enrollment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Identity.Role", b =>
@@ -695,25 +672,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("e_learning.Data.Entities.Enrollment", b =>
-                {
-                    b.HasOne("e_learning.Data.Entities.Course", "Course")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("e_learning.Data.Entities.Student", "Student")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("e_learning.Data.Entities.Identity.UserRefreshToken", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Identity.User", "user")
@@ -806,8 +764,6 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Course", b =>
                 {
-                    b.Navigation("Enrollments");
-
                     b.Navigation("Modules");
 
                     b.Navigation("Reviews");
@@ -845,8 +801,6 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Student", b =>
                 {
-                    b.Navigation("Enrollments");
-
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

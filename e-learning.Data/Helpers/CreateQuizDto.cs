@@ -30,5 +30,7 @@
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public List<QuestionDto> Questions { get; set; } = new();
+
+        public List<CreateChoiceDto> Choices { get;  set;} = new();
     }
 }

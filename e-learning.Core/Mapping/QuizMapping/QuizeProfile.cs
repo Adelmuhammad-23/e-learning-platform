@@ -8,11 +8,13 @@ namespace e_learning.Core.Mapping.QuizMapping
     {
         public QuizeProfileProfile()
         {
-            CreateMap<Quiz, QuizWithQuestionsDto>();
+            CreateMap<Quiz, CreateQuizDto>().ForMember((dist)=>dist.Questions,(src)=>src.MapFrom((c)=>c.Questions));
             CreateMap<Question, QuestionDto>();
             CreateMap<CreateQuizDto, Quiz>();
             CreateMap<CreateQuestionDto, Question>();
             CreateMap<CreateChoiceDto, Choice>();
+            CreateMap<Question, CreateQuestionDto >().ForMember((dist) => dist.Choices, (src) => src.MapFrom((c) => c.Choices));
+            CreateMap<Choice, CreateChoiceDto > ();
         }
     }
 }

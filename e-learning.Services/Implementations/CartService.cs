@@ -1,6 +1,7 @@
 ﻿using e_learning.Data.Helpers;
 using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.Services.Implementations
 {
@@ -20,6 +21,7 @@ namespace e_learning.Services.Implementations
             _payPalService = payPalService;
             _enrollmentService = enrollmentService;
         }
+
         public async Task<string> CheckoutAsync(int studentId)
         {
             var cart = await _cartRepository.GetCartAsync(studentId);
@@ -80,7 +82,6 @@ namespace e_learning.Services.Implementations
             var approvalUrl = await _payPalService.CreateOrderAsync(total, studentId);
             return approvalUrl;
         }
-
 
         public async Task RemoveFromCartAsync(int studentId, int courseId)
         {
