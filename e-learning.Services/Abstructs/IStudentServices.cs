@@ -6,8 +6,10 @@ namespace e_learning.Services.Abstructs
 {
     public interface IStudentServices
     {
-        Task<Student> GetStudentAsync(int id);
+        Task<StudentDTO> GetStudentAsync(int id);
+        Task<List<StudentDTO>> GetAllStudentAsync();
         Task<string> AddStudentAsync(Student student);
+        Task<string> DeleteStudentAsync(int studentId);
         public Task<string> UpdateStudentAsync(int id, UpdateStudentDTO student, IFormFile ImageUrl);
     }
 }

@@ -5,6 +5,8 @@
         public string Title { get; set; }
         public int CourseId { get; set; }
         public int ModuleId { get; set; }
+        public string? Message { get; set; }
+
         public List<CreateQuestionDto> Questions { get; set; }
     }
 
@@ -31,6 +33,6 @@
         public string Title { get; set; } = string.Empty;
         public List<QuestionDto> Questions { get; set; } = new();
 
-        public List<CreateChoiceDto> Choices { get;  set;} = new();
+        public List<CreateChoiceDto> Choices { get; set; } = new();
     }
 }

@@ -29,12 +29,22 @@ namespace e_learning.infrastructure.Implementation
         {
             return await _context.Students.AsNoTracking().FirstOrDefaultAsync(s => s.Id.Equals(studentId));
         }
-
+        public async Task<List<Student>> GetAllStudentAsync()
+        {
+            return await _context.Students.AsNoTracking().ToListAsync();
+        }
         public async Task<string> UpdateStudentAsync(Student student)
         {
             var stu = _context.Students.Update(student);
             await _context.SaveChangesAsync();
             return "updated";
+        }
+
+        public async Task<string> DeleteStudentAsync(Student student)
+        {
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
+            return "Deleted";
         }
     }
 }

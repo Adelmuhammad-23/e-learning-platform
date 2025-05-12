@@ -9,6 +9,7 @@ namespace e_learning.Core.Mapping.StudentMapping
         public StudentProfile()
         {
             CreateMap<UpdateStudentDTO, Student>();
+            CreateMap<Student, StudentDTO>();
         }
     }
 }
