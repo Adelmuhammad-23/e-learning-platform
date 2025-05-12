@@ -717,6 +717,17 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("e_learning.Data.Entities.Choice", b =>
+                {
+                    b.HasOne("e_learning.Data.Entities.Question", "Question")
+                        .WithMany("Choices")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("e_learning.Data.Entities.Course", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Category", "Category")
