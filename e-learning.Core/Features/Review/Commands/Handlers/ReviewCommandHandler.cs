@@ -40,46 +40,26 @@ namespace e_learning.Core.Features.Review.Commands.Handlers
             var course = await _courseServices.ExistsAsync(request.CourseId);
             if (!course)
                 return NotFound<string>("Course is not found");
-            var token = await _authenticationServices.ValidateToken(request.Token);
-            switch (token)
-            {
-                case "InvalidToken":
-                    return Unauthorized<string>("Token is not valid");
-                case "NotExpired":
-                    {
-                        var addReview = await _reviewService.AddReviewAsync(review);
-                        if (addReview != "Success")
-                            return BadRequest<string>("Failed to add review");
-                        return Success("Review added successfully");
-                    }
-                default:
-                    return BadRequest<string>("error when check token is valid or not");
-            }
+            var addReview = await _reviewService.AddReviewAsync(review);
+            if (addReview != "Success")
+                return BadRequest<string>("Failed to add review");
+            return Success("Review added successfully");
+
         }
         public async Task<Responses<string>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
         {
-            var token = await _authenticationServices.ValidateToken(request.Token);
-            switch (token)
-            {
-                case "InvalidToken":
-                    return Unauthorized<string>("Token is not valid");
-                case "NotExpired":
-                    {
-                        var review = await _reviewService.GetByIdAsync(request.ReviewId);
-                        if (review == null)
-                            return NotFound<string>("Review not found");
+            var review = await _reviewService.GetByIdAsync(request.ReviewId);
+            if (review == null)
+                return NotFound<string>("Review not found");
 
-                        review.Rating = request.Rating;
-                        review.Comment = request.Comment;
+            review.Rating = request.Rating;
+            review.Comment = request.Comment;
 
-                        var updated = await _reviewService.UpdateAsync(review);
-                        return updated
-                            ? Success("Review updated successfully")
-                            : BadRequest<string>("Failed to update review");
-                    }
-                default:
-                    return BadRequest<string>("Error validating token");
-            }
+            var updated = await _reviewService.UpdateAsync(review);
+            return updated
+                ? Success("Review updated successfully")
+                : BadRequest<string>("Failed to update review");
+
         }
 
         public async Task<Responses<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)

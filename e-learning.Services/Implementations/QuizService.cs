@@ -3,6 +3,7 @@ using e_learning.Data.Entities;
 using e_learning.Data.Helpers;
 using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
+using Microsoft.AspNetCore.Http;
 
 namespace e_learning.Services.Implementations
 {
@@ -12,31 +13,76 @@ namespace e_learning.Services.Implementations
         private readonly ICourseServices _courseServices;
         private readonly IModuleService _moduleService;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEnrollmentService _enrollmentService;
 
-        public QuizService(IQuizRepository quizRepository, IModuleService moduleService, ICourseServices courseServices, IMapper mapper)
+        public QuizService(IEnrollmentService enrollmentService, IHttpContextAccessor httpContextAccessor, IQuizRepository quizRepository, IModuleService moduleService, ICourseServices courseServices, IMapper mapper)
         {
             _quizRepository = quizRepository;
             _courseServices = courseServices;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _enrollmentService = enrollmentService;
             _moduleService = moduleService;
         }
-
-        public async Task<List<QuizWithQuestionsDto>> GetAllAsync()
+        public async Task<List<CreateQuizDto>> GetAllAsync()
         {
+            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
+            var studentId = int.Parse(userIdStr);
+
             var quizzes = await _quizRepository.GetAllAsync();
-            return _mapper.Map<List<QuizWithQuestionsDto>>(quizzes);
+            var quizMapping = _mapper.Map<List<CreateQuizDto>>(quizzes);
+
+            foreach (var quiz in quizMapping)
+            {
+                var checkStudentCourseEnrolled = await _enrollmentService.isEnrollment(studentId, quiz.CourseId);
+
+                if (!checkStudentCourseEnrolled)
+                {
+                    quiz.Questions.Clear();
+                    quiz.Message = "You are not registered in this course.";
+                }
+                else
+                    quiz.Message = "You can start solving the quiz.";
+
+            }
+
+            return quizMapping;
         }
 
-        public async Task<QuizWithQuestionsDto> GetByIdAsync(int id)
+        public async Task<CreateQuizDto> GetByIdAsync(int id)
         {
+            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
+            var studentId = int.Parse(userIdStr);
+
             var quiz = await _quizRepository.GetByIdAsync(id);
-            return _mapper.Map<QuizWithQuestionsDto>(quiz);
+            if (quiz == null)
+                return null;
+            var quizMapping = _mapper.Map<CreateQuizDto>(quiz);
+
+
+            var checkStudentCourseEnrolled = await _enrollmentService.isEnrollment(studentId, quiz.CourseId);
+
+            if (!checkStudentCourseEnrolled)
+            {
+                quiz.Questions.Clear();
+                quizMapping.Message = "You are not registered in this course.";
+            }
+            else
+                quizMapping.Message = "You can start solving the quiz.";
+
+
+            return quizMapping;
         }
         public async Task<string> AddAsync(CreateQuizDto quiz)
         {
             var existingCourse = await _courseServices.GetCourseByIdAsync(quiz.CourseId);
             if (existingCourse == null)
                 return ("Course not found");
+            var existingModule = await _moduleService.GetModuleByIdAsync(quiz.ModuleId);
+            if (existingCourse == null)
+                return ("Module not found");
+
             var mappedQuiz = _mapper.Map<Quiz>(quiz);
             await _quizRepository.AddAsync(mappedQuiz);
             return ("Course Added is successfully");

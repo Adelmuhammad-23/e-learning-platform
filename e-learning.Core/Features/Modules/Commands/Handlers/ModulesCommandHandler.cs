@@ -11,7 +11,8 @@ namespace e_learning.Core.Features.Modules.Commands.Handlers
         IRequestHandler<AddModuleCommand, Responses<string>>,
         IRequestHandler<AddVideoToModuleCommand, Responses<string>>,
         IRequestHandler<UpdateModuleCommand, Responses<string>>,
-        IRequestHandler<DeleteVideoFromModuleCommand, Responses<string>>
+        IRequestHandler<DeleteVideoFromModuleCommand, Responses<string>>,
+        IRequestHandler<DeleteModuleCommand, Responses<string>>
     {
         private readonly IModuleService _moduleService;
         private readonly IVideoServices _videoService;
@@ -75,5 +76,15 @@ namespace e_learning.Core.Features.Modules.Commands.Handlers
             }
         }
 
+        public async Task<Responses<string>> Handle(DeleteModuleCommand request, CancellationToken cancellationToken)
+        {
+            var course = await _moduleService.GetModuleByIdAsync(request.Id);
+            if (course == null)
+                return NotFound<string>("Course not found");
+            var courseDeleted = await _moduleService.DeleteAsync(request.Id);
+            if (courseDeleted == "Deleted")
+                return Success("Deleted is successfully");
+            return BadRequest<string>("Error when delete this course");
+        }
     }
 }

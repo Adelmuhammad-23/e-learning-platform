@@ -214,6 +214,32 @@ namespace e_learning.infrastructure.Migrations
                     b.ToTable("courses");
                 });
 
+            modelBuilder.Entity("e_learning.Data.Entities.Enrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Enrollments");
+                });
+
             modelBuilder.Entity("e_learning.Data.Entities.Identity.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -460,6 +486,8 @@ namespace e_learning.infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ModuleId");
+
                     b.ToTable("Quizzes");
                 });
 
@@ -650,6 +678,17 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("e_learning.Data.Entities.Choice", b =>
+                {
+                    b.HasOne("e_learning.Data.Entities.Question", "Question")
+                        .WithMany("Choices")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("e_learning.Data.Entities.Course", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Category", "Category")
@@ -665,6 +704,25 @@ namespace e_learning.infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("e_learning.Data.Entities.Enrollment", b =>
+                {
+                    b.HasOne("e_learning.Data.Entities.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("e_learning.Data.Entities.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Identity.UserRefreshToken", b =>
@@ -711,6 +769,17 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Quiz");
                 });
 
+            modelBuilder.Entity("e_learning.Data.Entities.Quiz", b =>
+                {
+                    b.HasOne("e_learning.Data.Entities.Module", "Module")
+                        .WithMany("Quizzes")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Module");
+                });
+
             modelBuilder.Entity("e_learning.Data.Entities.Reviews", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Course", "Course")
@@ -748,6 +817,8 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Course", b =>
                 {
+                    b.Navigation("Enrollments");
+
                     b.Navigation("Modules");
 
                     b.Navigation("Reviews");
@@ -768,6 +839,8 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Module", b =>
                 {
+                    b.Navigation("Quizzes");
+
                     b.Navigation("Videos");
                 });
 
@@ -783,6 +856,8 @@ namespace e_learning.infrastructure.Migrations
 
             modelBuilder.Entity("e_learning.Data.Entities.Student", b =>
                 {
+                    b.Navigation("Enrollments");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

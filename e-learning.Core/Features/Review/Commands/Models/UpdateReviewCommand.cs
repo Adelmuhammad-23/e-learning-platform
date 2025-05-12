@@ -14,6 +14,5 @@ namespace e_learning.Core.Features.Review.Commands.Models
         public int? Rating { get; set; }
         public string? Comment { get; set; }
 
-        public string Token { get; set; } = string.Empty;
     }
 }
