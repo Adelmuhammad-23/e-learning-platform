@@ -32,11 +32,30 @@ namespace e_learning.Services.Implementations
             return "Can't add student because is null !";
         }
 
-        public async Task<Student> GetStudentAsync(int id)
+        public async Task<string> DeleteStudentAsync(int studentId)
+        {
+            var student = await _studentRepository.GetStudentAsync(studentId);
+            if (student == null)
+                return "NotFound";
+            var studentRemoved = await _studentRepository.DeleteStudentAsync(student);
+            return studentRemoved;
+        }
+
+        public async Task<List<StudentDTO>> GetAllStudentAsync()
+        {
+            var students = await _studentRepository.GetAllStudentAsync();
+            var studentsMapping = _mapper.Map<List<StudentDTO>>(students);
+            return studentsMapping;
+        }
+
+        public async Task<StudentDTO> GetStudentAsync(int id)
         {
             var stu = await _studentRepository.GetStudentAsync(id);
             if (stu != null)
-                return stu;
+            {
+                var stuMapping = _mapper.Map<StudentDTO>(stu);
+                return stuMapping;
+            }
             return null;
         }
 
@@ -78,5 +97,7 @@ namespace e_learning.Services.Implementations
             await _studentRepository.UpdateStudentAsync(existing);
             return "updated";
         }
+
+
     }
 }

@@ -32,6 +32,14 @@ namespace e_learning.infrastructure.Implementation
             await _context.Enrollments.AddAsync(enrollment);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> isEnrollment(int studentId, int courseId)
+        {
+            var check = await _context.Enrollments.Where(i => i.StudentId.Equals(studentId) && i.CourseId.Equals(courseId)).FirstOrDefaultAsync();
+            if (check != null)
+                return true;
+            return false;
+        }
     }
 
 }

@@ -1,4 +1,6 @@
-﻿using e_learning.Data.Entities;
+﻿using AutoMapper;
+using e_learning.Data.Entities;
+using e_learning.Data.Helpers;
 using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 
@@ -7,10 +9,12 @@ namespace e_learning.Services.Implementations
     public class EnrollmentService : IEnrollmentService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
+        private readonly IMapper _mapper;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository)
+        public EnrollmentService(IMapper mapper, IEnrollmentRepository enrollmentRepository)
         {
             _enrollmentRepository = enrollmentRepository;
+            _mapper = mapper;
         }
 
         public async Task EnrollStudentInCourseAsync(int studentId, int courseId)
@@ -29,9 +33,19 @@ namespace e_learning.Services.Implementations
             await _enrollmentRepository.AddEnrollmentAsync(enrollment);
         }
 
-        public async Task<IEnumerable<Enrollment>> GetEnrollmentsForStudentAsync(int studentId)
+        public async Task<IEnumerable<EnrollmentDTO>> GetEnrollmentsForStudentAsync(int studentId)
         {
-            return await _enrollmentRepository.GetEnrollmentsByStudentAsync(studentId);
+            var enrollmentsForStudent = await _enrollmentRepository.GetEnrollmentsByStudentAsync(studentId);
+            if (enrollmentsForStudent == null)
+                return null;
+            var enrollmentsForStudentMapping = _mapper.Map<IEnumerable<EnrollmentDTO>>(enrollmentsForStudent);
+            return enrollmentsForStudentMapping;
+        }
+
+        public async Task<bool> isEnrollment(int studentId, int courseId)
+        {
+            var result = await _enrollmentRepository.isEnrollment(studentId, courseId);
+            return result;
         }
     }
 

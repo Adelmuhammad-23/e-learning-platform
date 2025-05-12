@@ -14,6 +14,36 @@ namespace e_learning.API.Controllers
         {
             _studentServices = studentServices;
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllStudent([FromRoute] int id)
+        {
+            var student = await _studentServices.GetStudentAsync(id);
+            if (student == null)
+                return NotFound($"Not found student with this Id: {id}");
+            return Ok(student);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllStudent()
+        {
+            var students = await _studentServices.GetAllStudentAsync();
+            if (students == null)
+                return NotFound("Not found students yet");
+            return Ok(students);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStudent([FromRoute] int id)
+        {
+            var student = await _studentServices.DeleteStudentAsync(id);
+            switch (student)
+            {
+                case "NotFound":
+                    return NotFound($"Not found student with this Id: {id}");
+                case "Deleted":
+                    return Ok("Student is deleted successfully");
+                default:
+                    return BadRequest("Error when delete student");
+            }
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStudentAsync([FromRoute] int id, [FromForm] UpdateStudentDTO updateStudent)
         {
