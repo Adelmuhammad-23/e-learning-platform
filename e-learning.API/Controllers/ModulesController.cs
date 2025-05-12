@@ -1,6 +1,7 @@
 ﻿using e_learning.API.Base;
 using e_learning.Core.Features.Modules.Commands.Models;
 using e_learning.Core.Features.Modules.Queries.Models;
+using e_learning.Services.Abstructs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,14 @@ namespace e_learning.API.Controllers
 
     public class ModulesController : AppControllerBase
     {
+        private readonly IVideoServices _videoServices;
+
+
+        public ModulesController(IVideoServices videoServices)
+        {
+            _videoServices = videoServices;
+        }
+
         [HttpGet("Course/{id}")]
         public async Task<IActionResult> GetModulesInCourseAsync([FromRoute] int id) => NewResult(await Mediator.Send(new GetByCourseIdQuery(id)));
 
@@ -28,6 +37,11 @@ namespace e_learning.API.Controllers
         public async Task<IActionResult> DeleteVideoFromModuleAsync([FromRoute] int id) => NewResult(await Mediator.Send(new DeleteVideoFromModuleCommand(id)));
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteModuleAsync([FromRoute] int id) => NewResult(await Mediator.Send(new DeleteModuleCommand(id)));
-
+        [HttpPatch("watch")]
+        public async Task<IActionResult> MarkVideoWatched([FromQuery] int studentId, [FromQuery] int videoId)
+        {
+            await _videoServices.MarkVideoWatchedAsync(studentId, videoId);
+            return Ok(new { message = "Video marked as watched." });
+        }
     }
 }

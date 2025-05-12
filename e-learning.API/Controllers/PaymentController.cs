@@ -1,7 +1,6 @@
 ﻿using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 using e_learning.Services.Implementations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.API.Controllers
@@ -50,7 +49,7 @@ namespace e_learning.API.Controllers
                 await _cartRepository.GetCartAsync(studentId);
             }
             await _cartRepository.DeleteCartAsync(studentId);
-            return Ok("Payment completed and courses assigned.");
+            return Ok("http://localhost:4200/myCourses");
         }
 
 

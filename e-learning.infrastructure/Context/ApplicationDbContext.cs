@@ -29,5 +29,37 @@ namespace e_learning.infrastructure.Context
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<TopPricedCourses> TopPricedCourses { get; set; }
         public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
+        public DbSet<StudentVideo> StudentVideos { get; set; }
+        public DbSet<StudentQuiz> StudentQuizzes { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<StudentVideo>()
+                .HasKey(sv => new { sv.StudentId, sv.VideoId });
+
+            modelBuilder.Entity<StudentVideo>()
+                .HasOne(sv => sv.Student)
+                .WithMany(s => s.StudentVideos)
+                .HasForeignKey(sv => sv.StudentId);
+
+            modelBuilder.Entity<StudentVideo>()
+                .HasOne(sv => sv.Video)
+                .WithMany(v => v.StudentVideos)
+                .HasForeignKey(sv => sv.VideoId);
+
+            modelBuilder.Entity<StudentQuiz>()
+                .HasKey(sq => new { sq.StudentId, sq.QuizId });
+
+            modelBuilder.Entity<StudentQuiz>()
+                .HasOne(sq => sq.Student)
+                .WithMany(s => s.StudentQuizzes)
+                .HasForeignKey(sq => sq.StudentId);
+
+            modelBuilder.Entity<StudentQuiz>()
+                .HasOne(sq => sq.Quiz)
+                .WithMany(q => q.StudentQuizzes)
+                .HasForeignKey(sq => sq.QuizId);
+        }
     }
 }

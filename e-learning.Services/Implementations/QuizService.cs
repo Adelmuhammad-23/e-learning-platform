@@ -25,6 +25,25 @@ namespace e_learning.Services.Implementations
             _enrollmentService = enrollmentService;
             _moduleService = moduleService;
         }
+        public async Task SubmitQuizScoreAsync(int studentId, int quizId, double score)
+        {
+            var entry = await _quizRepository.GetStudentQuizAsync(studentId, quizId);
+            if (entry == null)
+            {
+                await _quizRepository.AddStudentQuizAsync(new StudentQuiz
+                {
+                    StudentId = studentId,
+                    QuizId = quizId,
+                    Score = score
+                });
+            }
+            else
+            {
+                entry.Score = score;
+            }
+
+            await _quizRepository.SaveChangesAsync();
+        }
         public async Task<List<CreateQuizDto>> GetAllAsync()
         {
             var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;

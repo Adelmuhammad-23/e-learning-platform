@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using e_learning.infrastructure.Context;
 
@@ -11,9 +12,11 @@ using e_learning.infrastructure.Context;
 namespace e_learning.infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250512155909_updateVideoAndQuizeTables")]
+    partial class updateVideoAndQuizeTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -480,9 +483,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Property<int>("ModuleId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -548,42 +548,6 @@ namespace e_learning.infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("e_learning.Data.Entities.StudentQuiz", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
-                    b.HasKey("StudentId", "QuizId");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("StudentQuizzes");
-                });
-
-            modelBuilder.Entity("e_learning.Data.Entities.StudentVideo", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VideoId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsWatched")
-                        .HasColumnType("bit");
-
-                    b.HasKey("StudentId", "VideoId");
-
-                    b.HasIndex("VideoId");
-
-                    b.ToTable("StudentVideos");
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
@@ -827,44 +791,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("e_learning.Data.Entities.StudentQuiz", b =>
-                {
-                    b.HasOne("e_learning.Data.Entities.Quiz", "Quiz")
-                        .WithMany("StudentQuizzes")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("e_learning.Data.Entities.Student", "Student")
-                        .WithMany("StudentQuizzes")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Quiz");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("e_learning.Data.Entities.StudentVideo", b =>
-                {
-                    b.HasOne("e_learning.Data.Entities.Student", "Student")
-                        .WithMany("StudentVideos")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("e_learning.Data.Entities.Video", "Video")
-                        .WithMany("StudentVideos")
-                        .HasForeignKey("VideoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Video");
-                });
-
             modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
                 {
                     b.HasOne("e_learning.Data.Entities.Module", "Module")
@@ -918,8 +844,6 @@ namespace e_learning.infrastructure.Migrations
             modelBuilder.Entity("e_learning.Data.Entities.Quiz", b =>
                 {
                     b.Navigation("Questions");
-
-                    b.Navigation("StudentQuizzes");
                 });
 
             modelBuilder.Entity("e_learning.Data.Entities.Student", b =>
@@ -927,15 +851,6 @@ namespace e_learning.infrastructure.Migrations
                     b.Navigation("Enrollments");
 
                     b.Navigation("Reviews");
-
-                    b.Navigation("StudentQuizzes");
-
-                    b.Navigation("StudentVideos");
-                });
-
-            modelBuilder.Entity("e_learning.Data.Entities.Video", b =>
-                {
-                    b.Navigation("StudentVideos");
                 });
 #pragma warning restore 612, 618
         }
