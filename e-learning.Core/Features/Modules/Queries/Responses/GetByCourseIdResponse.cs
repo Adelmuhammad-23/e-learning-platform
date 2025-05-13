@@ -1,6 +1,4 @@
-﻿using e_learning.Data.Entities;
-
-namespace e_learning.Core.Features.Modules.Queries.Responses
+﻿namespace e_learning.Core.Features.Modules.Queries.Responses
 {
     public class GetByCourseIdResponse
     {
@@ -18,6 +16,7 @@ namespace e_learning.Core.Features.Modules.Queries.Responses
         public string Title { get; set; }
         public string Url { get; set; }
         public int ModuleId { get; set; }
+        public bool isWatched { get; set; }
         public TimeSpan Duration { get; set; }
     }
 

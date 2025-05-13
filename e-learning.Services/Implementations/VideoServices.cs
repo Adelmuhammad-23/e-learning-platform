@@ -26,6 +26,7 @@ namespace e_learning.Services.Implementations
         #region Handel Functions
         public async Task MarkVideoWatchedAsync(int studentId, int videoId)
         {
+
             var entry = await _videoRepository.GetStudentVideoAsync(studentId, videoId);
             if (entry == null)
             {
@@ -68,6 +69,12 @@ namespace e_learning.Services.Implementations
             await _videoRepository.Addvideo(video);
 
             return "Success";
+        }
+
+        public async Task<bool> isWatched(int studentId, int videoId)
+        {
+            var check = await _videoRepository.isWatched(studentId, videoId);
+            return check;
         }
         #endregion
 

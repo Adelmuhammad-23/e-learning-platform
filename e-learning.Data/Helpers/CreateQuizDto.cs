@@ -5,6 +5,8 @@
         public string Title { get; set; }
         public int CourseId { get; set; }
         public int ModuleId { get; set; }
+        public double Score { get; set; }
+
         public string? Message { get; set; }
 
         public List<CreateQuestionDto> Questions { get; set; }

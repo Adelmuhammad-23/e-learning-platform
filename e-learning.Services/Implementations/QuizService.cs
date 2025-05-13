@@ -16,7 +16,7 @@ namespace e_learning.Services.Implementations
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEnrollmentService _enrollmentService;
         private readonly IInstructorService _instructorService;
-        public QuizService(IEnrollmentService enrollmentService, IHttpContextAccessor httpContextAccessor, IQuizRepository quizRepository, IModuleService moduleService, ICourseServices courseServices,IInstructorService instructorService, IMapper mapper)
+        public QuizService(IEnrollmentService enrollmentService, IHttpContextAccessor httpContextAccessor, IQuizRepository quizRepository, IModuleService moduleService, ICourseServices courseServices, IInstructorService instructorService, IMapper mapper)
         {
             _quizRepository = quizRepository;
             _courseServices = courseServices;
@@ -24,12 +24,13 @@ namespace e_learning.Services.Implementations
             _httpContextAccessor = httpContextAccessor;
             _enrollmentService = enrollmentService;
             _moduleService = moduleService;
-            _instructorService= instructorService;
+            _instructorService = instructorService;
 
 
         }
         public async Task SubmitQuizScoreAsync(int studentId, int quizId, double score)
         {
+
             var entry = await _quizRepository.GetStudentQuizAsync(studentId, quizId);
             if (entry == null)
             {
@@ -70,6 +71,12 @@ namespace e_learning.Services.Implementations
 
             }
 
+            foreach (var quizDto in quizMapping)
+            {
+                var quize = await _quizRepository.GetByTitleAsync(quizDto.Title);
+                var score = await _quizRepository.GetScore(studentId, quize.Id);
+                quizDto.Score = score;
+            }
             return quizMapping;
         }
 
@@ -77,15 +84,15 @@ namespace e_learning.Services.Implementations
         {
             var role = _httpContextAccessor.HttpContext?.User?.FindFirst(@"http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
 
-            var userIdStr =(role == "Instructor")?
-                _httpContextAccessor.HttpContext?.User?.FindFirst("instructorId")?.Value:
+            var userIdStr = (role == "Instructor") ?
+                _httpContextAccessor.HttpContext?.User?.FindFirst("instructorId")?.Value :
                 _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
-            var userId = int.Parse(userIdStr?? "-1");
+            var userId = int.Parse(userIdStr ?? "-1");
             var quiz = await _quizRepository.GetByIdAsync(id);
             if (quiz == null)
                 return null;
             var quizMapping = _mapper.Map<CreateQuizDto>(quiz);
-            if(role== "Instructor")
+            if (role == "Instructor")
             {
                 var CheckInstructorCourse = await _instructorService.isInstrucorCourse(userId, quiz.CourseId);
                 if (!CheckInstructorCourse)

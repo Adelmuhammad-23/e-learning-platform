@@ -1,6 +1,7 @@
 ﻿using e_learning.Data.Entities;
 using e_learning.infrastructure.Context;
 using e_learning.infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_learning.infrastructure.Implementation
 {
@@ -40,6 +41,14 @@ namespace e_learning.infrastructure.Implementation
         {
             _context.videos.Remove(video);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> isWatched(int studentId, int videoId)
+        {
+            var check = await _context.StudentVideos.AsNoTracking().Where(si => si.StudentId.Equals(studentId) && si.VideoId.Equals(videoId)).FirstOrDefaultAsync();
+            if (check.IsWatched)
+                return true;
+            return false;
         }
     }
 }

@@ -6,6 +6,8 @@ namespace e_learning.infrastructure.Repositories
     {
 
         Task<StudentVideo> GetStudentVideoAsync(int studentId, int videoId);
+        Task<bool> isWatched(int studentId, int videoId);
+
         Task AddStudentVideoAsync(StudentVideo studentVideo);
         public Task<string> Addvideo(Video video);
         public Task<Video> GetVideoByIdAsync(int id);

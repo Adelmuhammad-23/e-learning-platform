@@ -4,6 +4,7 @@ using e_learning.Data.Entities;
 using e_learning.Data.Helpers;
 using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Net;
 
@@ -14,14 +15,18 @@ namespace e_learning.Services.Implementations
         private readonly IVideoRepository _videoRepository;
         private readonly IModuleRepository _moduleRepository;
         private readonly Cloudinary _cloudinary;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
 
         public ModuleService(
-            IVideoRepository videoRepository,
+            IHttpContextAccessor httpContextAccessor,
+        IVideoRepository videoRepository,
             IModuleRepository moduleRepository,
             IOptions<CloudinarySettings> config)
         {
             _videoRepository = videoRepository;
             _moduleRepository = moduleRepository;
+            _httpContextAccessor = httpContextAccessor;
 
             var acc = new Account(
                 config.Value.CloudName,
@@ -30,7 +35,7 @@ namespace e_learning.Services.Implementations
                 );
 
             _cloudinary = new Cloudinary(acc);
-            _cloudinary.Api.Timeout = 10*60*60*1000;
+            _cloudinary.Api.Timeout = 10 * 60 * 60 * 1000;
             _cloudinary.Api.Client.Timeout = TimeSpan.FromMinutes(10);
         }
 
@@ -112,6 +117,8 @@ namespace e_learning.Services.Implementations
 
         public async Task<Module> GetModuleByIdAsync(int id)
         {
+
+
             var Module = await _moduleRepository.GetByIdAsync(id);
             if (Module == null)
                 return null;

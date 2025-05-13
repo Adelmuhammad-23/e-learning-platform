@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }
+        public bool isWatched { get; set; }
 
         public int ModuleId { get; set; }
         public TimeSpan Duration { get; set; }
