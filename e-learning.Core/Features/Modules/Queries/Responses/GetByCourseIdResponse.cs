@@ -24,6 +24,8 @@
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public double Score { get; set; }
+
         public int NumberOfQuestions { get; set; }
     }
 }

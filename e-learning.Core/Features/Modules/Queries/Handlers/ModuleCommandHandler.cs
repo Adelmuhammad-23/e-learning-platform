@@ -2,6 +2,7 @@
 using e_learning.Core.Bases;
 using e_learning.Core.Features.Modules.Queries.Models;
 using e_learning.Core.Features.Modules.Queries.Responses;
+using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -16,15 +17,17 @@ namespace e_learning.Core.Features.Modules.Queries.Handlers
         private readonly IEnrollmentService _enrollmentService;
         private readonly IVideoServices _videoServices;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IQuizRepository _quizRepository;
 
         private readonly IMapper _mapper;
-        public ModuleCommandHandler(IVideoServices videoServices, IHttpContextAccessor httpContextAccessor, IModuleService moduleService, IMapper mapper, IEnrollmentService enrollmentService, ICourseServices courseServices)
+        public ModuleCommandHandler(IQuizRepository quizRepository, IVideoServices videoServices, IHttpContextAccessor httpContextAccessor, IModuleService moduleService, IMapper mapper, IEnrollmentService enrollmentService, ICourseServices courseServices)
         {
             _videoServices = videoServices;
             _moduleService = moduleService;
             _mapper = mapper;
             _courseServices = courseServices;
             _enrollmentService = enrollmentService;
+            _quizRepository = quizRepository;
             _httpContextAccessor = httpContextAccessor;
         }
         public async Task<Responses<List<GetByCourseIdResponse>>> Handle(GetByCourseIdQuery request, CancellationToken cancellationToken)
@@ -70,6 +73,16 @@ namespace e_learning.Core.Features.Modules.Queries.Handlers
                         video.isWatched = true;
                     else
                         video.isWatched = false;
+                }
+
+            }
+            foreach (var quizDto in modulesMapping)
+            {
+                foreach (var quizz in quizDto.Quizzes)
+                {
+                    var quize = await _quizRepository.GetByTitleAsync(quizDto.Title);
+                    var score = await _quizRepository.GetScore(userId, quizz.Id);
+                    quizz.Score = score;
                 }
 
             }
