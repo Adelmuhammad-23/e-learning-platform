@@ -11,13 +11,16 @@ namespace e_learning.Services.Implementations
         private readonly IInstructorRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _webHost;
-
-        public InstructorService(IInstructorRepository repository,
-            IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost)
+        private readonly ICourseRepository _CourseRespository;
+       public InstructorService(IInstructorRepository repository,
+            IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost,
+            ICourseRepository CourseRespository
+            )
         {
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
             _webHost = webHost;
+            _CourseRespository = CourseRespository;
         }
         public async Task AddInstructorAsync(Instructor instructor)
         {
@@ -79,6 +82,14 @@ namespace e_learning.Services.Implementations
             if (instructor == null) return false;
 
             await _repository.DeleteAsync(instructor);
+            return true;
+        }
+
+        public async Task<bool> isInstrucorCourse(int InstructorId,int CourseId)
+        {
+            var Course = await this._CourseRespository.GetCourseByIdAsync(CourseId);
+            if (Course == null) return false;
+            if(Course.InstructorId != InstructorId) return false;
             return true;
         }
     }

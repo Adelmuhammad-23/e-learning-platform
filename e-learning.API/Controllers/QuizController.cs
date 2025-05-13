@@ -87,6 +87,6 @@ namespace e_learning.API.Controllers
                 return NotFound("Quiz not found");
             await _quizService.DeleteAsync(id); return Ok();
         }
-        [HttpDelete("{id}")] public async Task<IActionResult> Delete(int id) { await _quizService.DeleteAsync(id); return Ok(); }
+      
     }
 }
