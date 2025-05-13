@@ -49,7 +49,7 @@ namespace e_learning.API.Controllers
                 await _cartRepository.GetCartAsync(studentId);
             }
             await _cartRepository.DeleteCartAsync(studentId);
-            return Ok("http://localhost:4200/myCourses");
+            return Redirect("http://localhost:4200/home");
         }
 
 

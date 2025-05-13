@@ -47,8 +47,6 @@ namespace e_learning.Services.Implementations
             var result = await _enrollmentRepository.isEnrollment(studentId, courseId);
             return result;
         }
-
-
     }
 
 }
