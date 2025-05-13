@@ -9,7 +9,8 @@ namespace e_learning.Core.Features.Instructors.Commands.Handlers
 {
     public class InstructorCommandHandler : ResponsesHandler,
         IRequestHandler<UpdateInstructorCommand, Responses<string>>,
-        IRequestHandler<DeleteInstructorCommand, Responses<string>>
+        IRequestHandler<DeleteInstructorCommand, Responses<string>>,
+        IRequestHandler<AddProfessionalInstructorCommand, Responses<string>>
     {
         private readonly IInstructorService _instructorService;
         private readonly IMapper _mapper;
@@ -39,6 +40,17 @@ namespace e_learning.Core.Features.Instructors.Commands.Handlers
                 return NotFound<string>("Instructor not found");
 
             return Success("Instructor deleted successfully");
+        }
+
+        public async Task<Responses<string>> Handle(AddProfessionalInstructorCommand request, CancellationToken cancellationToken)
+        {
+            var instructor = _mapper.Map<Instructor>(request);
+            var result = await _instructorService.AddProfessionalInstructorAsync(request.Id, instructor, request.Certificates);
+
+            if (!result)
+                return NotFound<string>("Instructor not found");
+
+            return Success("Add Professional Instructor successfully");
         }
     }
 }

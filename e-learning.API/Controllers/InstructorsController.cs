@@ -26,6 +26,10 @@ namespace e_learning.API.Controllers
         public async Task<IActionResult> UpdateInstructorAsync([FromForm] UpdateInstructorCommand command) =>
             NewResult(await Mediator.Send(command));
 
+        [HttpPatch()]
+        public async Task<IActionResult> AddProfessionalInstructorAsync([FromForm] AddProfessionalInstructorCommand command) =>
+            NewResult(await Mediator.Send(command));
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInstructorAsync([FromRoute] int id) =>
             NewResult(await Mediator.Send(new DeleteInstructorCommand { Id = id }));

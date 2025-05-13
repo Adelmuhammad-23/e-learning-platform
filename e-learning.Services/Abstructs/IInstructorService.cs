@@ -12,6 +12,7 @@ namespace e_learning.Services.Abstructs
         Task AddInstructorAsync(Instructor instructor);
 
         Task<bool> UpdateInstructorAsync(int id, Instructor updatedInstructor, IFormFile ImageUrl);
+        Task<bool> AddProfessionalInstructorAsync(int id, Instructor updatedInstructor, List<IFormFile> certificates);
         Task<bool> DeleteInstructorAsync(int id);
 
         Task<bool> isInstrucorCourse(int InstructorId, int CourseId);

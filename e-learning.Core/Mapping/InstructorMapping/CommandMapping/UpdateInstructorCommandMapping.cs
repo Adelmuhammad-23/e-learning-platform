@@ -9,6 +9,8 @@ namespace e_learning.Core.Mapping.InstructorMapping
         {
             CreateMap<UpdateInstructorCommand, Instructor>()
                 .ForMember(dest => dest.Image, src => src.MapFrom(i => i.Image));
+            CreateMap<AddProfessionalInstructorCommand, Instructor>()
+                .ForMember(dest => dest.Certificates, src => src.MapFrom(i => i.Certificates));
 
         }
     }

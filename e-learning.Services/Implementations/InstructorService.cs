@@ -12,10 +12,10 @@ namespace e_learning.Services.Implementations
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _webHost;
         private readonly ICourseRepository _CourseRespository;
-       public InstructorService(IInstructorRepository repository,
-            IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost,
-            ICourseRepository CourseRespository
-            )
+        public InstructorService(IInstructorRepository repository,
+             IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost,
+             ICourseRepository CourseRespository
+             )
         {
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
@@ -85,12 +85,54 @@ namespace e_learning.Services.Implementations
             return true;
         }
 
-        public async Task<bool> isInstrucorCourse(int InstructorId,int CourseId)
+        public async Task<bool> isInstrucorCourse(int InstructorId, int CourseId)
         {
             var Course = await this._CourseRespository.GetCourseByIdAsync(CourseId);
             if (Course == null) return false;
-            if(Course.InstructorId != InstructorId) return false;
+            if (Course.InstructorId != InstructorId) return false;
             return true;
         }
+
+        public async Task<bool> AddProfessionalInstructorAsync(int id, Instructor updatedInstructor, List<IFormFile> certificates)
+        {
+            var request = _httpContextAccessor.HttpContext?.Request;
+            if (request == null) return false;
+
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null) return false;
+
+            var webRootPath = _webHost.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            var uploadsFolder = Path.Combine(webRootPath, "uploads", "certificates", "instructors");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var certificateUrls = new List<string>();
+
+            foreach (var certificate in certificates)
+            {
+                if (certificate.Length > 0)
+                {
+                    var uniqueFileName = $"{Guid.NewGuid().ToString().Substring(0, 8)}{Path.GetExtension(certificate.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await certificate.CopyToAsync(stream);
+                    }
+
+                    var fileUrl = $"{request.Scheme}://{request.Host}/uploads/certificates/instructors/{uniqueFileName}";
+                    certificateUrls.Add(fileUrl);
+                }
+            }
+
+            existing.Certificates = certificateUrls;
+
+            existing.Position = updatedInstructor.Position;
+
+            await _repository.UpdateAsync(existing);
+            return true;
+        }
+
     }
 }
