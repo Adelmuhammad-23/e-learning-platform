@@ -5,6 +5,7 @@ using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.Services.Implementations
 {
@@ -39,6 +40,11 @@ namespace e_learning.Services.Implementations
                 return "NotFound";
             var studentRemoved = await _studentRepository.DeleteStudentAsync(student);
             return studentRemoved;
+        }
+
+        public Task<IActionResult> GetAllStudent()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<StudentDTO>> GetAllStudentAsync()
@@ -97,7 +103,5 @@ namespace e_learning.Services.Implementations
             await _studentRepository.UpdateStudentAsync(existing);
             return "updated";
         }
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using e_learning.Data.Entities;
 using e_learning.Data.Helpers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace e_learning.Services.Abstructs
 {
@@ -11,5 +12,7 @@ namespace e_learning.Services.Abstructs
         Task<string> AddStudentAsync(Student student);
         Task<string> DeleteStudentAsync(int studentId);
         public Task<string> UpdateStudentAsync(int id, UpdateStudentDTO student, IFormFile ImageUrl);
+
+        Task<IActionResult> GetAllStudent();
     }
 }

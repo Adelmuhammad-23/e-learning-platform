@@ -15,8 +15,8 @@ namespace e_learning.Services.Implementations
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEnrollmentService _enrollmentService;
-
-        public QuizService(IEnrollmentService enrollmentService, IHttpContextAccessor httpContextAccessor, IQuizRepository quizRepository, IModuleService moduleService, ICourseServices courseServices, IMapper mapper)
+        private readonly IInstructorService _instructorService;
+        public QuizService(IEnrollmentService enrollmentService, IHttpContextAccessor httpContextAccessor, IQuizRepository quizRepository, IModuleService moduleService, ICourseServices courseServices,IInstructorService instructorService, IMapper mapper)
         {
             _quizRepository = quizRepository;
             _courseServices = courseServices;
@@ -24,11 +24,15 @@ namespace e_learning.Services.Implementations
             _httpContextAccessor = httpContextAccessor;
             _enrollmentService = enrollmentService;
             _moduleService = moduleService;
+            _instructorService= instructorService;
+
+
         }
         public async Task<List<CreateQuizDto>> GetAllAsync()
         {
+
             var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
-            var studentId = int.Parse(userIdStr);
+            var studentId = int.Parse(userIdStr ?? "-1");
 
             var quizzes = await _quizRepository.GetAllAsync();
             var quizMapping = _mapper.Map<List<CreateQuizDto>>(quizzes);
@@ -52,25 +56,38 @@ namespace e_learning.Services.Implementations
 
         public async Task<CreateQuizDto> GetByIdAsync(int id)
         {
-            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
-            var studentId = int.Parse(userIdStr);
+            var role = _httpContextAccessor.HttpContext?.User?.FindFirst(@"http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
 
+            var userIdStr =(role == "Instructor")?
+                _httpContextAccessor.HttpContext?.User?.FindFirst("instructorId")?.Value:
+                _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
+            var userId = int.Parse(userIdStr?? "-1");
             var quiz = await _quizRepository.GetByIdAsync(id);
             if (quiz == null)
                 return null;
             var quizMapping = _mapper.Map<CreateQuizDto>(quiz);
-
-
-            var checkStudentCourseEnrolled = await _enrollmentService.isEnrollment(studentId, quiz.CourseId);
-
-            if (!checkStudentCourseEnrolled)
+            if(role== "Instructor")
             {
-                quiz.Questions.Clear();
-                quizMapping.Message = "You are not registered in this course.";
+                var CheckInstructorCourse = await _instructorService.isInstrucorCourse(userId, quiz.CourseId);
+                if (!CheckInstructorCourse)
+                {
+                    quiz.Questions.Clear();
+                    quizMapping.Message = "You are not registered in this course.";
+                }
+                else
+                    quizMapping.Message = "success";
             }
             else
-                quizMapping.Message = "You can start solving the quiz.";
-
+            {
+                var checkStudentCourseEnrolled = await _enrollmentService.isEnrollment(userId, quiz.CourseId);
+                if (!checkStudentCourseEnrolled)
+                {
+                    quiz.Questions.Clear();
+                    quizMapping.Message = "You are not registered in this course.";
+                }
+                else
+                    quizMapping.Message = "You can start solving the quiz.";
+            }
 
             return quizMapping;
         }

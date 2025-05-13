@@ -13,6 +13,7 @@ namespace e_learning.API.Controllers
     public class ModulesController : AppControllerBase
     {
         [HttpGet("Course/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetModulesInCourseAsync([FromRoute] int id) => NewResult(await Mediator.Send(new GetByCourseIdQuery(id)));
 
         [HttpPost]

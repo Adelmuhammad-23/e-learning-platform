@@ -2,6 +2,7 @@
 using e_learning.Core.Bases;
 using e_learning.Core.Features.Modules.Queries.Models;
 using e_learning.Core.Features.Modules.Queries.Responses;
+using e_learning.Data.Entities;
 using e_learning.Services.Abstructs;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -27,24 +28,52 @@ namespace e_learning.Core.Features.Modules.Queries.Handlers
         }
         public async Task<Responses<List<GetByCourseIdResponse>>> Handle(GetByCourseIdQuery request, CancellationToken cancellationToken)
         {
-
-            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
-            var studentId = int.Parse(userIdStr);
             var module = await _moduleService.GetByCourseIdAsync(request.Id);
             if (module == null)
                 return NotFound<List<GetByCourseIdResponse>>("No found modules in this course");
             var modulesMapping = _mapper.Map<List<GetByCourseIdResponse>>(module);
-            foreach (var courses in modulesMapping)
+
+            var user = _httpContextAccessor.HttpContext?.User;
+
+            if (user == null || !user.Identity.IsAuthenticated)
             {
-                var checkStudentCourseEnrolled = await _enrollmentService.isEnrollment(studentId, courses.CourseId);
-                if (!checkStudentCourseEnrolled)
-                {
-                    foreach (var video in courses.Videos)
-                        video.Url = "You are not registered in this course.";
-                }
+                editVideos(false, modulesMapping, "not signed in");
+                return Success(modulesMapping);
             }
+
+            string role = _httpContextAccessor.HttpContext?.User?.FindFirst(@"http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+            if (role == "Instructor")
+            {
+                var insIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("instructorId")?.Value;
+                int insId = int.Parse(insIdStr);
+                var course = await _courseServices.GetCourseByIdAsync(request.Id);
+                if(course is null) return NotFound<List<GetByCourseIdResponse>>("No found modules in this course");
+                if (course.InstructorId == insId)
+                {
+                    return Success(modulesMapping);
+                }
+                else editVideos(false, modulesMapping, "you are not enrolled in this course");
+            } 
+            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst("studentId")?.Value;
+            var userId = int.Parse(userIdStr);
+            var checkStudentCourseEnrolled = await _enrollmentService.isEnrollment(userId,request.Id);
+            editVideos(checkStudentCourseEnrolled, modulesMapping, "you are not enrolled in this course");
             var result = Success(modulesMapping);
             return result;
+        }
+
+        public void editVideos(bool checkStudentCourseEnrolled, List<GetByCourseIdResponse> modulesMapping,string message)
+        {
+            if (!checkStudentCourseEnrolled)
+            {
+                foreach (var modules in modulesMapping)
+                {
+                    foreach (var video in modules.Videos)
+                    {
+                        video.Url = message;
+                    }
+                }
+            }
         }
     }
 }

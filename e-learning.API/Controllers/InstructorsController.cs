@@ -13,13 +13,12 @@ namespace e_learning.API.Controllers
     public class InstructorsController : AppControllerBase
     {
         [HttpGet]
-        [Authorize(Roles = "Instructor,Student")]
-
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllInstructorsAsync() =>
            NewResult(await Mediator.Send(new GetAllInstructorsQuery()));
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Instructor,Student")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetInstructorByIdAsync([FromRoute] int id) =>
             NewResult(await Mediator.Send(new GetInstructorByIdQuery(id)));
 

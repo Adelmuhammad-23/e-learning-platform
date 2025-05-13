@@ -7,7 +7,6 @@ namespace e_learning.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
 
     public class CategoriesController : AppControllerBase
     {
