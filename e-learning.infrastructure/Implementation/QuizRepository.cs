@@ -29,17 +29,13 @@ namespace e_learning.infrastructure.Implementation
 
         public async Task<double> GetScore(int studentId, int quizId)
         {
-            var quize = await _context.Quizzes.FindAsync(quizId);
 
             var score = await _context.StudentQuizzes.AsNoTracking().Where(s => s.StudentId.Equals(studentId) && s.QuizId.Equals(quizId)).FirstOrDefaultAsync();
             if (score != null)
-            {
-                quize.Score = score.Score;
-                await _context.SaveChangesAsync();
                 return score.Score;
+            else
 
-            }
-            return 0;
+                return 0;
         }
 
         public async Task<Quiz> GetByTitleAsync(string title) => await _context.Quizzes.AsNoTracking().Where(t => t.Title.Equals(title)).FirstOrDefaultAsync();

@@ -79,7 +79,15 @@ namespace e_learning.Services.Implementations
             }
             return quizMapping;
         }
-
+        private async Task GetScoreAsync(List<CreateQuizDto> createQuizDtos, int studentId, int quizId)
+        {
+            foreach (var quizDto in createQuizDtos)
+            {
+                var quize = await _quizRepository.GetByTitleAsync(quizDto.Title);
+                var score = await _quizRepository.GetScore(studentId, quize.Id);
+                quizDto.Score = score;
+            }
+        }
         public async Task<CreateQuizDto> GetByIdAsync(int id)
         {
             var role = _httpContextAccessor.HttpContext?.User?.FindFirst(@"http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
@@ -114,6 +122,11 @@ namespace e_learning.Services.Implementations
                 else
                     quizMapping.Message = "You can start solving the quiz.";
             }
+
+            var getQuiz = await _quizRepository.GetByTitleAsync(quizMapping.Title);
+            var score = await _quizRepository.GetScore(userId, getQuiz.Id);
+            quizMapping.Score = score;
+
 
             return quizMapping;
         }

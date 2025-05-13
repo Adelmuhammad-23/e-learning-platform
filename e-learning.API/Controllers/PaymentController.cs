@@ -15,9 +15,13 @@ namespace e_learning.API.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly ICartRepository _cartRepository;
         private readonly IEnrollmentService _enrollmentService;
+        private readonly IEmailServices _emailServices;
+
+
 
 
         public PaymentController(
+            IEmailServices emailServices,
             ICartService cartService,
             PayPalService payPalService,
             IStudentRepository studentRepository,
@@ -29,6 +33,7 @@ namespace e_learning.API.Controllers
             _studentRepository = studentRepository;
             _cartRepository = cartRepository;
             _enrollmentService = enrollmentService;
+            _emailServices = emailServices;
         }
 
 
@@ -47,6 +52,51 @@ namespace e_learning.API.Controllers
                     await _enrollmentService.EnrollStudentInCourseAsync(studentId, course.CourseId);
                 }
                 await _cartRepository.GetCartAsync(studentId);
+
+                // ✅ Get student email (assuming you have a StudentService or similar)
+                var student = await _studentRepository.GetStudentAsync(studentId);
+                if (student != null)
+                {
+                    #region Purchase Confirmation Email Template
+                    var message = $@"
+        <html>
+        <head>
+            <style>
+                .email-container {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    padding: 20px;
+                    text-align: center;
+                }}
+                .email-box {{
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                    display: inline-block;
+                }}
+                .footer {{
+                    margin-top: 20px;
+                    font-size: 12px;
+                    color: #777;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='email-container'>
+                <div class='email-box'>
+                    <h2>Course Purchase Confirmation</h2>
+                    <p>Thank you for purchasing courses on <strong>Xcelerate Platform</strong>!</p>
+                    <p>You now have access to your new courses. Happy learning! 🎉</p>
+                    <p class='footer'>If you have any questions, feel free to contact our support.</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+                    #endregion
+
+                    await _emailServices.SendEmailAsync(student.Email, message, "Course Purchase Confirmation");
+                }
             }
             await _cartRepository.DeleteCartAsync(studentId);
             return Redirect("http://localhost:4200/home");
