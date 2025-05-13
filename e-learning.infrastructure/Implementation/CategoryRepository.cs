@@ -24,10 +24,36 @@ namespace e_learning.infrastructure.Implementation
         }
 
         #region Functions
+        public async Task<Category?> GetCategoryById(int id)
+        {
+            return await _context.Category.FindAsync(id);
+        }
 
+        public async Task<Category> CreateCategory(Category category)
+        {
+            _context.Category.Add(category);
+            await _context.SaveChangesAsync();
+            return category;
+        }
 
+        public async Task<bool> UpdateCategory(Category category)
+        {
+            _context.Category.Update(category);
+            return await _context.SaveChangesAsync() > 0;
+        }
 
-        #endregion
+        public async Task<bool> DeleteCategory(int id)
+        {
+            var category = await _context.Category.FindAsync(id);
+            if (category == null) return false;
 
+            _context.Category.Remove(category);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
+
+
+    #endregion
+
 }
+

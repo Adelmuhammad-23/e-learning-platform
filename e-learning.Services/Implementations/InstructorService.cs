@@ -1,4 +1,6 @@
-﻿using e_learning.Data.Entities;
+﻿using AutoMapper;
+using e_learning.Data.Entities;
+using e_learning.Data.Helpers;
 using e_learning.infrastructure.Repositories;
 using e_learning.Services.Abstructs;
 using Microsoft.AspNetCore.Hosting;
@@ -12,11 +14,13 @@ namespace e_learning.Services.Implementations
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _webHost;
         private readonly ICourseRepository _CourseRespository;
-        public InstructorService(IInstructorRepository repository,
+        private readonly IMapper _mapper;
+        public InstructorService(IMapper mapper, IInstructorRepository repository,
              IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHost,
              ICourseRepository CourseRespository
              )
         {
+            _mapper = mapper;
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
             _webHost = webHost;
@@ -134,5 +138,12 @@ namespace e_learning.Services.Implementations
             return true;
         }
 
+        public async Task<List<InstructorDTO>> GetInstructorsIsNotApproved()
+        {
+            var instructorsNotApproved = await _repository.GetInstructorsIsNotApproved();
+            var mapping = _mapper.Map<List<InstructorDTO>>(instructorsNotApproved);
+
+            return mapping;
+        }
     }
 }

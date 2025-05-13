@@ -3,6 +3,7 @@ using e_learning.infrastructure.Implementation;
 using e_learning.infrastructure.Implementation.ViewsImplementation;
 using e_learning.infrastructure.Repositories;
 using e_learning.infrastructure.Repositories.Views;
+using e_learning.Services.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace e_learning.infrastructure
@@ -13,6 +14,7 @@ namespace e_learning.infrastructure
         {
             services.AddTransient<ICourseRepository, CourseRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IAdminRepository, AdminRepository>();
             services.AddTransient<ITopPricedCoursesView<TopPricedCourses>, TopPricedCoursesView>();
             services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
             services.AddTransient<IVideoRepository, VideoRepository>();

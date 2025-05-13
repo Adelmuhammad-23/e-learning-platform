@@ -57,5 +57,13 @@ namespace e_learning.infrastructure.Implementation
         {
             return await _context.instructors.AnyAsync(i => i.Id == id);
         }
+
+        public async Task<List<Instructor>> GetInstructorsIsNotApproved()
+        {
+            return await _context.instructors
+                           .Include(i => i.Courses)
+                           .Where(i => i.isApproved == false)
+                           .ToListAsync();
+        }
     }
 }
