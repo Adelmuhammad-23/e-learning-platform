@@ -24,6 +24,25 @@ namespace e_learning.Services.Implementations
         }
         #endregion
         #region Handel Functions
+        public async Task MarkVideoWatchedAsync(int studentId, int videoId)
+        {
+            var entry = await _videoRepository.GetStudentVideoAsync(studentId, videoId);
+            if (entry == null)
+            {
+                await _videoRepository.AddStudentVideoAsync(new StudentVideo
+                {
+                    StudentId = studentId,
+                    VideoId = videoId,
+                    IsWatched = true
+                });
+            }
+            else
+            {
+                entry.IsWatched = true;
+            }
+
+            await _videoRepository.SaveChangesAsync();
+        }
         public async Task<string> AddVideoAsync(Video video, IFormFile videoFile)
         {
             var request = _httpContextAccessor.HttpContext?.Request;

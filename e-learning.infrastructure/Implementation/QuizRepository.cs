@@ -13,7 +13,14 @@ namespace e_learning.infrastructure.Implementation
         {
             _context = context;
         }
+        public async Task<StudentQuiz> GetStudentQuizAsync(int studentId, int quizId)
+                => await _context.StudentQuizzes.FindAsync(studentId, quizId);
 
+        public async Task AddStudentQuizAsync(StudentQuiz studentQuiz)
+            => await _context.StudentQuizzes.AddAsync(studentQuiz);
+
+        public async Task SaveChangesAsync()
+            => await _context.SaveChangesAsync();
         public async Task<List<Quiz>> GetAllAsync() => await _context.Quizzes.Include(q => q.Questions).ThenInclude(c => c.Choices).ToListAsync();
         public async Task<Quiz> GetByIdAsync(int id) => await _context.Quizzes.Include(q => q.Questions).ThenInclude(c => c.Choices).FirstOrDefaultAsync(q => q.Id == id);
         public async Task AddAsync(Quiz quiz) { _context.Quizzes.Add(quiz); await _context.SaveChangesAsync(); }

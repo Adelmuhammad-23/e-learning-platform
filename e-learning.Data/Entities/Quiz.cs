@@ -5,9 +5,12 @@
         public int Id { get; set; }
         public string Title { get; set; }
         public int ModuleId { get; set; }
+        public double Score { get; set; }
 
         public Module Module { get; set; }
         public int CourseId { get; set; }
         public List<Question> Questions { get; set; }
+        public List<StudentQuiz> StudentQuizzes { get; set; }
+
     }
 }

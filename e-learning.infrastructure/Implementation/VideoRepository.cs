@@ -23,8 +23,14 @@ namespace e_learning.infrastructure.Implementation
             return "Success";
         }
         #endregion
+        public async Task<StudentVideo> GetStudentVideoAsync(int studentId, int videoId)
+     => await _context.StudentVideos.FindAsync(studentId, videoId);
 
+        public async Task AddStudentVideoAsync(StudentVideo studentVideo)
+            => await _context.StudentVideos.AddAsync(studentVideo);
 
+        public async Task SaveChangesAsync()
+       => await _context.SaveChangesAsync();
         public async Task<Video> GetVideoByIdAsync(int id)
         {
             return await _context.videos.FindAsync(id);

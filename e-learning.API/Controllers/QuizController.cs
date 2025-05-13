@@ -17,7 +17,12 @@ namespace e_learning.API.Controllers
         {
             _quizService = quizService;
         }
-
+        [HttpPatch("submit-score")]
+        public async Task<IActionResult> SubmitQuizScore([FromQuery] int studentId, [FromQuery] int quizId, [FromQuery] double score)
+        {
+            await _quizService.SubmitQuizScoreAsync(studentId, quizId, score);
+            return Ok(new { message = "Quiz score updated." });
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
