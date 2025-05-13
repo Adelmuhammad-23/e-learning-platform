@@ -20,6 +20,7 @@ namespace e_learning.API.Controllers
         [HttpPatch("submit-score")]
         public async Task<IActionResult> SubmitQuizScore([FromQuery] int studentId, [FromQuery] int quizId, [FromQuery] double score)
         {
+
             await _quizService.SubmitQuizScoreAsync(studentId, quizId, score);
             return Ok(new { message = "Quiz score updated." });
         }
@@ -87,6 +88,6 @@ namespace e_learning.API.Controllers
                 return NotFound("Quiz not found");
             await _quizService.DeleteAsync(id); return Ok();
         }
-      
+
     }
 }
