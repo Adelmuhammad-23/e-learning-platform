@@ -53,8 +53,8 @@ The platform follows **Clean Architecture**, ensuring a well-structured and main
 ┣ 📂 **Data Layer** 📌 - Defines Entities & Core Business Rules  
 ┣ 📂 **Infrastructure Layer** 🏢 - Handles Data Persistence, Authentication, Emailing, and Payment Integration  
 ┣ 📂 **Service Layer** ⚙️ - Contains Business Services & Processing Logic  
+┣ 📂 **Service Layer** ⚙️ - Core business logic is covered by unit tests to ensure functionality and reliability  
 
-┣ 📂 **Testing Layer** ⚙️ - Core business logic is covered by unit tests to ensure functionality and reliability
 ---
 
 ## 🗄️ Database Schema
