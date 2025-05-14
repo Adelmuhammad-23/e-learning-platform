@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-learning.API", "e-learning.API\e-learning.API.csproj", "{7C63806B-9C83-4FC3-8BB0-9BA35C8AE163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-learning.API", "e-learning.API\e-learning.API.csproj", "{7C63806B-9C83-4FC3-8BB0-9BA35C8AE163}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-learning.Core", "e-learning.Core\e-learning.Core.csproj", "{6B933BF0-22CC-449D-835C-C6BC859C3CD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-learning.Core", "e-learning.Core\e-learning.Core.csproj", "{6B933BF0-22CC-449D-835C-C6BC859C3CD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-learning.Data", "e-learning.Data\e-learning.Data.csproj", "{2F0E91BF-0B88-4DE7-B276-CA04BEB6F3DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-learning.Data", "e-learning.Data\e-learning.Data.csproj", "{2F0E91BF-0B88-4DE7-B276-CA04BEB6F3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-learning.infrastructure", "e-learning.infrastructure\e-learning.infrastructure.csproj", "{0B47C45B-2594-4DB7-A74E-1B2DF9C43A6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-learning.infrastructure", "e-learning.infrastructure\e-learning.infrastructure.csproj", "{0B47C45B-2594-4DB7-A74E-1B2DF9C43A6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-learning.Services", "e-learning.Services\e-learning.Services.csproj", "{06F1E7CA-F8C4-44E2-859A-A4F78C631ADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-learning.Services", "e-learning.Services\e-learning.Services.csproj", "{06F1E7CA-F8C4-44E2-859A-A4F78C631ADD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-learning.Services.Tests", "e-learning.Services.Tests\e-learning.Services.Tests.csproj", "{599DC012-EE22-47A7-896E-CA34BE7B166D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{06F1E7CA-F8C4-44E2-859A-A4F78C631ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06F1E7CA-F8C4-44E2-859A-A4F78C631ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06F1E7CA-F8C4-44E2-859A-A4F78C631ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{599DC012-EE22-47A7-896E-CA34BE7B166D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{599DC012-EE22-47A7-896E-CA34BE7B166D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{599DC012-EE22-47A7-896E-CA34BE7B166D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{599DC012-EE22-47A7-896E-CA34BE7B166D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
