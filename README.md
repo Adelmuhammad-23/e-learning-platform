@@ -46,13 +46,14 @@ Built using **Clean Architecture**, the system ensures modularity, scalability, 
 
 The platform follows **Clean Architecture**, ensuring a well-structured and maintainable codebase:
 
+
 📂 **OnlineLearningPlatform**  
 ┣ 📂 **API Layer** 🌍 - Handles HTTP Requests & Responses  
 ┣ 📂 **Core Layer** 🏗️ - Contains Use Cases & Business Logic  
 ┣ 📂 **Data Layer** 📌 - Defines Entities & Core Business Rules  
 ┣ 📂 **Infrastructure Layer** 🏢 - Handles Data Persistence, Authentication, Emailing, and Payment Integration  
 ┣ 📂 **Service Layer** ⚙️ - Contains Business Services & Processing Logic  
-┣ 📂 **Testing Layer** ⚙️ - Core business logic is covered by unit tests to ensure functionality and reliability
+┣📂 **Testing Layer** ⚙️ - Core business logic is covered by unit tests to ensure functionality and reliability
 ---
 
 ## 🗄️ Database Schema
