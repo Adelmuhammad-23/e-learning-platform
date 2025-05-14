@@ -46,8 +46,11 @@ namespace e_learning.infrastructure.Implementation
         public async Task<bool> isWatched(int studentId, int videoId)
         {
             var check = await _context.StudentVideos.AsNoTracking().Where(si => si.StudentId.Equals(studentId) && si.VideoId.Equals(videoId)).FirstOrDefaultAsync();
-            if (check.IsWatched)
-                return true;
+            if (check != null)
+            {
+                if (check.IsWatched)
+                    return true;
+            }
             return false;
         }
     }

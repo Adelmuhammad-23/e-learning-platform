@@ -12,7 +12,8 @@ namespace e_learning.Data.Entities
 
         public string? Position { get; set; }
         public List<string>? Certificates { get; set; }
-        public bool? isApproved { get; set; }
+
+        public bool isApproved { get; set; } = false;
 
 
 

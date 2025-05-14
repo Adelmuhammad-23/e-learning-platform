@@ -38,7 +38,7 @@ namespace e_learning.API.Controllers
         public async Task<IActionResult> DeleteVideoFromModuleAsync([FromRoute] int id) => NewResult(await Mediator.Send(new DeleteVideoFromModuleCommand(id)));
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteModuleAsync([FromRoute] int id) => NewResult(await Mediator.Send(new DeleteModuleCommand(id)));
-        [HttpPatch("watch")]
+        [HttpPatch("video/watch")]
         public async Task<IActionResult> MarkVideoWatched([FromQuery] int studentId, [FromQuery] int videoId)
         {
             await _videoServices.MarkVideoWatchedAsync(studentId, videoId);

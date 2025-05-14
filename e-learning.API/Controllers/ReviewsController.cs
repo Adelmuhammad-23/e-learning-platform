@@ -21,25 +21,33 @@ namespace e_learning.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddModuleAsync([FromHeader] string Token, AddReviewCommand reviewCommand)
+        public async Task<IActionResult> AddModuleAsync(AddReviewCommand reviewCommand)
         {
-            var token = await _authenticationServices.ValidateToken(Token);
-            switch (token)
+            var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
+
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Authorization header is missing or invalid");
+            }
+
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+
+            var validationResult = await _authenticationServices.ValidateToken(token);
+
+            switch (validationResult)
             {
                 case "InvalidToken":
                     return Unauthorized("Token is not valid");
                 case "NotExpired":
-                    {
-                        return NewResult(await Mediator.Send(reviewCommand));
-
-                    }
+                    return NewResult(await Mediator.Send(reviewCommand));
                 default:
-                    return BadRequest("error when check token is valid or not");
+                    return BadRequest("Error when checking if token is valid or not");
             }
         }
 
 
         [HttpGet("course/{courseId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCourseReviewsAsync(int courseId) =>
             NewResult(await Mediator.Send(new GetReviewsByCourseIdQuery(courseId)));
 

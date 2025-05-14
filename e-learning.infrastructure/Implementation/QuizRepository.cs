@@ -35,7 +35,7 @@ namespace e_learning.infrastructure.Implementation
                 return score.Score;
             else
 
-                return 0;
+                return -1;
         }
 
         public async Task<Quiz> GetByTitleAsync(string title) => await _context.Quizzes.AsNoTracking().Where(t => t.Title.Equals(title)).FirstOrDefaultAsync();
