@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/e-learning.API/wwwroot/uploads/images/CourseImages
+/e-learning.API/wwwroot/uploads/images/instructors
